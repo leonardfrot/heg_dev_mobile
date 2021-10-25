@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="228dp"
         android:layout_marginBottom="109dp"
-        android:text="Bonjour, je suis dans le projet !"
+        android:text="Bonjour"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
