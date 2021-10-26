@@ -18,21 +18,27 @@
         android:id="@+id/add_note1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
         android:clickable="true"
+        android:focusable="true"
+        android:contentDescription="1er bouton pour ajouter une note"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/ic_menu_add"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="307dp"
-        tools:layout_editor_absoluteY="639dp"
-        android:focusable="true" />
+        />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_note2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginBottom="64dp"
+        android:contentDescription="2e bouton pour ajouter une note"
         android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@android:drawable/ic_input_add"
-        tools:layout_editor_absoluteX="49dp"
-        tools:layout_editor_absoluteY="604dp"
-        tools:ignore="MissingConstraints" />
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

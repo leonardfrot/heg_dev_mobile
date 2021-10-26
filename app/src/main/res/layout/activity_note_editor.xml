@@ -14,6 +14,7 @@
         android:gravity="start|top"
         android:inputType="textMultiLine"
         android:textColor="@android:color/holo_purple"
+        android:contentDescription="1er bouton pour ajouter une note"
         tools:layout_editor_absoluteX="101dp"
         tools:layout_editor_absoluteY="316dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
