@@ -1,10 +1,9 @@
-package com.example.notes.activities;
+package com.example.keepnote.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -13,12 +12,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import com.example.notes.R;
-import com.example.notes.activities.CreateNoteActivity;
-import com.example.notes.adapters.NotesAdapter;
-import com.example.notes.dao.NoteDAO;
-import com.example.notes.database.NotesDatabase;
-import com.example.notes.entities.Note;
+import com.example.keepnote.R;
+import com.example.keepnote.activities.CreateNoteActivity;
+import com.example.keepnote.adapters.NotesAdapter;
+import com.example.keepnote.dao.NoteDAO;
+import com.example.keepnote.database.NotesDatabase;
+import com.example.keepnote.entities.Note;
 
 import java.util.ArrayList;
 import java.util.List;

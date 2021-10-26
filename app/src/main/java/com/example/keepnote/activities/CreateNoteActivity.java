@@ -1,60 +1,142 @@
-package com.example.keepnote;
+package com.example.keepnote.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.HashSet;
+import com.example.keepnote.R;
+import com.example.keepnote.database.NotesDatabase;
+import com.example.keepnote.entities.Note;
 
-public class NoteEditorActivity extends AppCompatActivity {
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
-    int noteID;
+public class CreateNoteActivity extends AppCompatActivity {
+
+    private EditText inputNoteTitle, inputNoteSubtitle, inputNoteText;
+    private TextView textDateTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_note);
 
-        EditText editText = (EditText) findViewById(R.id.editText);
-        Intent intent = getIntent();
-        noteID = intent.getIntExtra("noteID", -1); //-1 pour éviter qu'un nombre aléatoire ne soit transmis à noteID
-
-        if (noteID != -1) {
-            editText.setText(MainActivity.notes.get(noteID));  //récupératoin de notre ID
-        } else {
-            MainActivity.notes.add("");                // initialisation de la note vide
-            noteID = MainActivity.notes.size() - 1;
-            MainActivity.mListAdapter.notifyDataSetChanged(); //Mise à jour de la liste avec les dernières modif
-        }
-
-        editText.addTextChangedListener(new TextWatcher() { //Pour mettre à jour le texte dans la note lors d'une modif
+        ImageView imageBack = findViewById(R.id.imageBack);
+        imageBack.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //TextWatcher() oblige la définition de cette méthode mais on ne fait rien
+            public void onClick(View view) {
+                onBackPressed();
             }
+        });
 
+        inputNoteTitle = findViewById(R.id.inputNoteTitle);
+        inputNoteSubtitle = findViewById(R.id.inputNoteSubtitle);
+        inputNoteText = findViewById(R.id.inputNote);
+        textDateTime = findViewById(R.id.textDateTime);
+
+        textDateTime.setText(
+                new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm a", Locale.getDefault())
+                        .format(new Date())
+        );
+
+        ImageView imageSave= findViewById(R.id.imageSave);
+        imageSave.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                MainActivity.notes.set(noteID, String.valueOf(s));  //Sélectionner la note qui est en cours de modif
-                MainActivity.mListAdapter.notifyDataSetChanged();   //Mise à jour de la liste avec les dernières modif
-
-                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.tanay.thunderbird.deathnote", Context.MODE_PRIVATE); //Enregistrer les nouvelle données dans notre BD
-                HashSet<String> set = new HashSet<>(MainActivity.notes);
-                sharedPreferences.edit().putStringSet("notes", set).apply();
+            public void onClick(View view) {
+                saveNote();
             }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                //TextWatcher() oblige la définition de cette méthode mais on ne fait rien
-            }
-
         });
     }
 
+    private void saveNote(){
+        if(inputNoteTitle.getText().toString().trim().isEmpty()){
+            Toast.makeText(this, "Note title can't be empty !", Toast.LENGTH_SHORT).show();
+            return;
+        } else if(inputNoteSubtitle.getText().toString().trim().isEmpty()
+                && inputNoteText.getText().toString().trim().isEmpty()){
+            Toast.makeText(this, "Note can't be empty !", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        final Note note = new Note();
+        note.setTitle((inputNoteTitle.getText().toString()));
+        note.setSubtitle((inputNoteSubtitle.getText().toString()));
+        note.setNoteText(inputNoteText.getText().toString());
+        note.setDateTime(textDateTime.getText().toString());
+
+        @SuppressLint("StaticFieldLeak")
+        class SaveNoteTask extends AsyncTask<Void, Void, Void>{
+
+            @Override
+            protected Void doInBackground(Void... voids){
+                NotesDatabase.getDatabase(getApplicationContext()).noteDao().insertNote(note);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid){
+                super.onPostExecute(aVoid);
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        }
+
+        new SaveNoteTask().execute();
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
