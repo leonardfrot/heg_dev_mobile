@@ -6,5 +6,7 @@
     <string name="note_subtitle">Note Subtitle</string>
     <string name="textDateTime">DateTime</string>
     <string name="type_note_here">Type note here ...</string>
+    <string name="miscellaneous">miscellaneous</string>
+    <string name="pick_color">pick_color</string>
 
 </resources>
