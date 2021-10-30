@@ -10,6 +10,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -17,6 +18,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,6 +44,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     private ImageView imageNote;
 
     private String selectedNoteColor;
+    private String selectedImagePath;
 
     private static final int REQEST_CODE_STORAGE_PERMISSION = 1;
     private static final int REQUEST_CODE_SELECT_IMAGE = 2;
@@ -81,6 +84,7 @@ public class CreateNoteActivity extends AppCompatActivity {
 
         //choix de la couleur par defaut
         selectedNoteColor = "#333333";
+        selectedImagePath = "";
 
         initMiscellaneous();
         setSubtitleIndicator();
@@ -101,6 +105,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         note.setNoteText(inputNoteText.getText().toString());
         note.setDateTime(textDateTime.getText().toString());
         note.setColor(selectedNoteColor);
+        note.setImagePath(selectedImagePath);
 
         @SuppressLint("StaticFieldLeak")
         class SaveNoteTask extends AsyncTask<Void, Void, Void>{
@@ -240,10 +245,15 @@ public class CreateNoteActivity extends AppCompatActivity {
     }
 
     private void selectImage(){
-
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        if (intent.resolveActivity(getPackageManager())!=null){
+            startActivityForResult(intent, REQUEST_CODE_SELECT_IMAGE);
+        }
 
     }
 
+
+    // c'est la méthode qui contrôle si l'utilisateur a bien autorisé la sélection.
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -252,7 +262,7 @@ public class CreateNoteActivity extends AppCompatActivity {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 selectImage();
             }else{
-                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Pas de permission pour sélectionner l'image", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -270,6 +280,8 @@ public class CreateNoteActivity extends AppCompatActivity {
                         imageNote.setImageBitmap(bitmap);
                         imageNote.setVisibility(View.VISIBLE);
 
+                        selectedImagePath = getPathFromUrl(selectedImageUri);
+
 
                     }catch(Exception exception){
                         Toast.makeText(this, exception.getMessage(), Toast.LENGTH_SHORT).show();
@@ -277,6 +289,22 @@ public class CreateNoteActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private String getPathFromUrl(Uri contentUri){
+        String filePath;
+        Cursor cursor = getContentResolver().query(contentUri, null, null, null, null);
+        if(cursor==null){
+            filePath = contentUri.getPath();
+        }
+        else{
+            cursor.moveToFirst();
+            int index = cursor.getColumnIndex("_data");
+            filePath = cursor.getString(index);
+            cursor.close();
+        }
+
+        return filePath;
     }
 }
 
