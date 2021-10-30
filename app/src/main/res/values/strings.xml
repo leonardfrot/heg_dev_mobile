@@ -9,5 +9,8 @@
     <string name="miscellaneous">miscellaneous</string>
     <string name="pick_color">pick_color</string>
     <string name="add_image">add image</string>
+    <string name="add_url">add url</string>
+    <string name="enter_url">enter url</string>
+    <string name="add">add</string>
 
 </resources>
