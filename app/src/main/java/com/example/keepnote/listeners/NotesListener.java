@@ -1,5 +1,6 @@
 package com.example.keepnote.listeners;
 
+
 import com.example.keepnote.entities.Note;
 
 public interface NotesListener {

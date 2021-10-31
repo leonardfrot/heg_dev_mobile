@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                     noteList.add(0, notes.get(0));
                     notesAdapter.notifyItemInserted(0);
                     notesRecyclerView.smoothScrollToPosition(0);
-                }else if (requestCode == REQUEST_CODE_ADD_NOTE){
+                }else if (requestCode == REQUEST_CODE_UPDATE_NOTE){
                     noteList.remove(noteClickedPosition);
                     noteList.add(noteClickedPosition, notes.get(noteClickedPosition));
                     notesAdapter.notifyItemInserted(noteClickedPosition);
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_CODE_ADD_NOTE && resultCode == RESULT_OK){
             getNotes(REQUEST_CODE_ADD_NOTE);
-        }else if(requestCode == REQUEST_CODE_ADD_NOTE && resultCode == RESULT_OK){
+        }else if(requestCode == REQUEST_CODE_UPDATE_NOTE && resultCode == RESULT_OK){
             if(data != null){
                 getNotes(REQUEST_CODE_UPDATE_NOTE);
             }
