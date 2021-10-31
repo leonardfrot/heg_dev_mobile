@@ -5,8 +5,13 @@
       <map>
         <entry key="..\:/Users/alwinwil.vollenwe/AndroidStudioProjects/heg_dev_mobile/app/src/main/res/drawable/background_delete.xml" value="0.10740740740740741" />
         <entry key="..\:/Users/alwinwil.vollenwe/AndroidStudioProjects/heg_dev_mobile/app/src/main/res/drawable/ic_delete.xml" value="0.10740740740740741" />
+        <entry key="..\:/Users/alwinwil.vollenwe/AndroidStudioProjects/heg_dev_mobile/app/src/main/res/font/ubuntu_bold.xml" value="0.1609375" />
+        <entry key="..\:/Users/alwinwil.vollenwe/AndroidStudioProjects/heg_dev_mobile/app/src/main/res/font/ubuntu_medium.xml" value="0.1609375" />
+        <entry key="..\:/Users/alwinwil.vollenwe/AndroidStudioProjects/heg_dev_mobile/app/src/main/res/font/ubuntu_regular.xml" value="0.1609375" />
         <entry key="..\:/Users/alwinwil.vollenwe/AndroidStudioProjects/heg_dev_mobile/app/src/main/res/layout/activity_create_note.xml" value="0.1" />
         <entry key="..\:/Users/alwinwil.vollenwe/AndroidStudioProjects/heg_dev_mobile/app/src/main/res/layout/activity_main.xml" value="0.536" />
+        <entry key="..\:/Users/alwinwil.vollenwe/AndroidStudioProjects/heg_dev_mobile/app/src/main/res/layout/layout_delete_note.xml" value="0.1" />
+        <entry key="..\:/Users/alwinwil.vollenwe/AndroidStudioProjects/heg_dev_mobile/app/src/main/res/layout/layout_miscellaneous.xml" value="0.2" />
         <entry key="..\:/Users/vincent.chassot/OneDrive - HESSO/Cours_sem_5_2021/Developpement_mobile/Projet_V2/heg_dev_mobile/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.14635416666666667" />
         <entry key="..\:/Users/vincent.chassot/OneDrive - HESSO/Cours_sem_5_2021/Developpement_mobile/Projet_V2/heg_dev_mobile/app/src/main/res/drawable/background_add_button.xml" value="0.14635416666666667" />
         <entry key="..\:/Users/vincent.chassot/OneDrive - HESSO/Cours_sem_5_2021/Developpement_mobile/Projet_V2/heg_dev_mobile/app/src/main/res/drawable/background_done_button.xml" value="0.14635416666666667" />
