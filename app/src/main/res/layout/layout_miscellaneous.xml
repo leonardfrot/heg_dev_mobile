@@ -212,8 +212,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
-            android:fontFamily="@font/ubuntu_medium"
-            android:includeFontPadding="false"
             android:text="@string/delete_note"
             android:textColor="@color/colorDelete"
             android:textSize="@dimen/_12ssp"/>
