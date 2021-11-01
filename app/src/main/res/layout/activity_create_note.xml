@@ -143,7 +143,7 @@
                 android:orientation="horizontal"
                 android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@+id/imageNote"
-                tools:ignore="UseCompoundDrawables"/>
+                tools:ignore="UseCompoundDrawables">
 
                 <TextView
                     android:id="@+id/textWebUrl"
@@ -161,10 +161,10 @@
                     android:contentDescription="@string/app_name"
                     android:src="@drawable/ic_delete"
                     app:tint="@color/colorDelete" />
+            </LinearLayout>
 
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <EditText
                 android:id="@+id/inputNote"
@@ -189,7 +189,7 @@
                 />
 
 
-
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
     <include layout="@layout/layout_miscellaneous"/>
