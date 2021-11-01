@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_margin="@dimen/_10sdp"
-    android:background="@drawable/background_delete">
+    android:background="@drawable/background_dialog">
 
     <ImageView
         android:id="@+id/ImageDeleteNote"
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_8sdp"
         android:layout_marginEnd="@dimen/_8sdp"
-        android:fontFamily="@font/ubuntu_bold"
+
         android:includeFontPadding="false"
         android:text="@string/delete_note"
         android:textColor="@color/colorWhite"
@@ -43,7 +43,6 @@
         android:layout_marginStart="@dimen/_8sdp"
         android:layout_marginTop="@dimen/_8sdp"
         android:layout_marginEnd="@dimen/_8sdp"
-        android:fontFamily="@font/ubuntu_regular"
         android:gravity="center_vertical"
         android:includeFontPadding="false"
         android:paddingStart="@dimen/_8sdp"
@@ -60,7 +59,6 @@
         android:layout_marginTop="@dimen/_8sdp"
         android:layout_marginEnd="@dimen/_8sdp"
         android:layout_marginBottom="@dimen/_8sdp"
-        android:fontFamily="@font/ubuntu_medium"
         android:includeFontPadding="false"
         android:padding="@dimen/_8sdp"
         android:text="@string/delete_note"
@@ -78,7 +76,6 @@
         android:layout_marginTop="@dimen/_8sdp"
         android:layout_marginEnd="@dimen/_8sdp"
         android:layout_marginBottom="@dimen/_8sdp"
-        android:fontFamily="@font/ubuntu_medium"
         android:includeFontPadding="false"
         android:padding="@dimen/_8sdp"
         android:text="@string/cancel_dialog"
