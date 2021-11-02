@@ -105,7 +105,8 @@
                 android:layout_height="@dimen/_35sdp"
                 android:contentDescription="@string/app_name"
                 android:padding="@dimen/_10sdp"
-                app:tint="@color/colorWhite" />
+                app:tint="@color/colorWhite"
+                tools:ignore="ImageContrastCheck" />
         </FrameLayout>
 
         <FrameLayout
@@ -146,6 +147,7 @@
         >
 
         <ImageView
+            android:id="@+id/Ima"
             android:layout_width="@dimen/_22sdp"
             android:layout_height="@dimen/_22sdp"
             android:contentDescription="@string/app_name"
@@ -158,7 +160,7 @@
             android:layout_marginStart="@dimen/_10sdp"
             android:text="@string/add_image"
             android:textColor="@color/colorIcon"
-            android:textSize="@dimen/_12ssp"/>
+            android:textSize="@dimen/_12ssp" />
     </LinearLayout>
 
     <!-- partie pour ajouter depuis un url-->
