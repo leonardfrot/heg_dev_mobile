@@ -17,6 +17,14 @@
         android:gravity="center"
         android:text="@string/miscellaneous"
         android:textColor="@color/colorWhite"
+        android:textSize="@dimen/_13ssp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pick_color"
+        android:textColor="@color/colorWhite"
         android:textSize="@dimen/_13ssp" />
 
     <LinearLayout
@@ -26,6 +34,8 @@
         android:layout_margin="@dimen/_10sdp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
+
+
 
         <FrameLayout
             android:layout_width="0dp"
@@ -129,12 +139,7 @@
                 app:tint="@color/colorWhite" />
         </FrameLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/pick_color"
-            android:textColor="@color/colorWhite"
-            android:textSize="@dimen/_13ssp" />
+
     </LinearLayout>
     <!-- partie pour ajouter image-->
     <LinearLayout

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- Dans ce layout, on paramètre l'affichage des notes sur l'écran principal
+ avec le titre, le sous-titre et la date -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layoutNote"
@@ -26,7 +29,8 @@
         android:layout_marginEnd="@dimen/_8sdp"
         android:layout_marginTop="@dimen/_8sdp"
         android:textColor="@color/colorWhite"
-        android:textSize="@dimen/_13ssp"
+        android:textSize="@dimen/_15ssp"
+        android:textStyle="bold"
         />
 
     <TextView
@@ -48,6 +52,7 @@
         android:layout_marginEnd="@dimen/_8sdp"
         android:layout_marginBottom="@dimen/_8sdp"
         android:textColor="@color/colorNoteSubtitleText"
-        android:textSize="@dimen/_7ssp"/>
+        android:textSize="@dimen/_7ssp"
+        android:textStyle="italic"/>
 
 </LinearLayout>
