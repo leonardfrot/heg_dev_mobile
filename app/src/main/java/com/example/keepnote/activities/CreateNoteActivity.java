@@ -53,7 +53,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     private String selectedNoteColor;
     private String selectedImagePath;
 
-    private static final int REQEST_CODE_STORAGE_PERMISSION = 1;
+    private static final int REQUEST_CODE_STORAGE_PERMISSION = 1;
     private static final int REQUEST_CODE_SELECT_IMAGE = 2;
 
     private AlertDialog dialogAddURL;
@@ -88,7 +88,7 @@ public class CreateNoteActivity extends AppCompatActivity {
                         .format(new Date())
         );
 
-        ImageView imageSave= findViewById(R.id.imageSave);
+        ImageView imageSave = findViewById(R.id.imageSave);
         imageSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,16 +113,30 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         });
 
-      findViewById(R.id.imageRemoveImage).setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-              imageNote.setImageBitmap(null);
-              imageNote.setVisibility(View.GONE);
-              findViewById(R.id.imageRemoveImage).setVisibility(View.GONE);
-              selectedImagePath = "";
-          }
-      });
+        findViewById(R.id.imageRemoveImage).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageNote.setImageBitmap(null);
+                imageNote.setVisibility(View.GONE);
+                findViewById(R.id.imageRemoveImage).setVisibility(View.GONE);
+                selectedImagePath = "";
+            }
+        });
 
+        if (getIntent().getBooleanExtra("isFronQuickActions", false)) {
+            String type = getIntent().getStringExtra("quickActionType");
+            if ( type != null) {
+                if ( type.equals("image")) {
+                    selectedImagePath = getIntent().getStringExtra("imagePath");
+                    imageNote.setImageBitmap(BitmapFactory.decodeFile(selectedImagePath));
+                    imageNote.setVisibility(View.VISIBLE);
+                    findViewById(R.id.imageRemoveImage).setVisibility(View.VISIBLE);
+                } else if ( type.equals("URL")) {
+                    textWebURL.setText(getIntent().getStringExtra("URL"));
+                    layoutWebURL.setVisibility(View.VISIBLE);
+                }
+            }
+        }
 
         initMiscellaneous();
         setSubtitleIndicator();
@@ -312,7 +326,7 @@ public class CreateNoteActivity extends AppCompatActivity {
                     ActivityCompat.requestPermissions(
                             CreateNoteActivity.this,
                             new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                            REQEST_CODE_STORAGE_PERMISSION
+                            REQUEST_CODE_STORAGE_PERMISSION
                     );
                 }else {
                     selectImage();
@@ -401,7 +415,7 @@ public class CreateNoteActivity extends AppCompatActivity {
 
     private void selectImage(){
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        if (intent.resolveActivity(getPackageManager())!=null){
+        if (intent.resolveActivity(getPackageManager())!= null){
             startActivityForResult(intent, REQUEST_CODE_SELECT_IMAGE);
         }
 
@@ -413,7 +427,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == REQEST_CODE_STORAGE_PERMISSION && grantResults.length > 0){
+        if(requestCode == REQUEST_CODE_STORAGE_PERMISSION && grantResults.length > 0){
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 selectImage();
             }else{

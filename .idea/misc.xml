@@ -4,7 +4,12 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/alwinwil.vollenwe/AndroidStudioProjects/heg_dev_mobile/app/src/main/res/layout/activity_main.xml" value="0.536" />
+        <entry key="..\:/Users/mounir.marzouk/StudioProjects/heg_dev_mobile/app/src/main/res/layout/activity_create_note.xml" value="0.15364583333333334" />
         <entry key="..\:/Users/mounir.marzouk/StudioProjects/heg_dev_mobile/app/src/main/res/layout/activity_main.xml" value="0.19429347826086957" />
+        <entry key="..\:/Users/mounir.marzouk/StudioProjects/heg_dev_mobile/app/src/main/res/layout/item_container_note.xml" value="0.15364583333333334" />
+        <entry key="..\:/Users/mounir.marzouk/StudioProjects/heg_dev_mobile/app/src/main/res/layout/layout_add_url.xml" value="0.15364583333333334" />
+        <entry key="..\:/Users/mounir.marzouk/StudioProjects/heg_dev_mobile/app/src/main/res/layout/layout_delete_note.xml" value="0.15364583333333334" />
+        <entry key="..\:/Users/mounir.marzouk/StudioProjects/heg_dev_mobile/app/src/main/res/layout/layout_miscellaneous.xml" value="0.15364583333333334" />
       </map>
     </option>
   </component>
