@@ -231,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                     try {
                         String selectedImagePath = getPathFromUrl(selectedImageUri);
                         Intent intent = new Intent(getApplicationContext(), CreateNoteActivity.class);
-                        intent.putExtra( "isFronQuickActions", true); intent.putExtra( "quickActionType", "image");
+                        intent.putExtra( "isFrontQuickActions", true); intent.putExtra( "quickActionType", "image");
                         intent.putExtra( "imagePath", selectedImagePath);
                         startActivityForResult(intent, REQUEST_CODE_ADD_NOTE);
                     } catch (Exception exception) {
