@@ -6,6 +6,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity(tableName = "notes")
 public class Note implements Serializable {
@@ -32,6 +33,8 @@ public class Note implements Serializable {
 
     @ColumnInfo(name="web_link")
     private String webLink;
+
+
 
     public int getId() {
         return id;
@@ -96,6 +99,7 @@ public class Note implements Serializable {
     public void setWebLink(String webLink) {
         this.webLink = webLink;
     }
+
 
     @NonNull
     @Override

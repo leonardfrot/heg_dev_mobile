@@ -160,10 +160,8 @@
                     android:contentDescription="@string/app_name"
                     android:src="@drawable/ic_delete"
                     app:tint="@color/colorDelete" />
+
             </LinearLayout>
-
-
-
 
             <EditText
                 android:id="@+id/inputNote"
@@ -185,6 +183,18 @@
                 android:textSize="@dimen/_13sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/layoutWebURL"
+                />
+
+            <EditText
+                android:id="@+id/date_time_imput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="select limit date and time"
+                android:textColor="@color/colorIcon"
+                android:textSize="@dimen/_10sdp"
+                android:textColorHint="@color/colorTextHint"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inputNote"
                 />
 
 

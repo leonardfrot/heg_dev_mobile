@@ -9,6 +9,9 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -21,14 +24,17 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.keepnote.R;
@@ -38,6 +44,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -49,6 +56,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     private ImageView imageNote;
     private TextView textWebURL;
     private LinearLayout layoutWebURL;
+    private EditText date_time_in;
 
     private String selectedNoteColor;
     private String selectedImagePath;
@@ -82,6 +90,9 @@ public class CreateNoteActivity extends AppCompatActivity {
         imageNote = findViewById(R.id.imageNote);
         textWebURL = findViewById(R.id.textWebUrl);
         layoutWebURL = findViewById(R.id.layoutWebURL);
+
+        date_time_in = findViewById(R.id.date_time_imput);
+        date_time_in.setInputType(InputType.TYPE_NULL);
 
         textDateTime.setText(
                 new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm a", Locale.getDefault())
@@ -138,8 +149,43 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         }
 
+        //partie pour chosir la date
+
+        date_time_in.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDateDialog(date_time_in);
+
+            }
+        });
         initMiscellaneous();
         setSubtitleIndicator();
+    }
+
+    private void showDateDialog(EditText date_time_in){
+        Calendar calendar = Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int y, int m, int d) {
+                calendar.set(Calendar.YEAR, y);
+                calendar.set(Calendar.MONTH, m);
+                calendar.set(Calendar.DAY_OF_MONTH, d);
+
+                TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener(){
+                    @Override
+                    public void onTimeSet(TimePicker view, int h, int m){
+                        calendar.set(Calendar.HOUR_OF_DAY, h);
+                        calendar.set(Calendar.MINUTE, m);
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd HH:mm");
+                        date_time_in.setText(simpleDateFormat.format(calendar.getTime()));
+                    }
+                };
+                new TimePickerDialog(CreateNoteActivity.this, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),false).show();
+
+            }
+        };
+        new DatePickerDialog( CreateNoteActivity.this, dateSetListener, calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
     private void setViewOrUpdateNote(){
