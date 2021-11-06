@@ -584,6 +584,8 @@ public class CreateNoteActivity extends AppCompatActivity {
         dialogAddURL.show();
         }
 
+
+
     }
 
 

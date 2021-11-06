@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
     private RecyclerView notesRecyclerView;
     private List<Note> noteList;
     private NotesAdapter notesAdapter;
+    private NotesDatabase notesDatabase;
 
     private int noteClickedPosition = -1;
 
