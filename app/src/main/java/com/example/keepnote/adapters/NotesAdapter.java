@@ -49,6 +49,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         );
     }
 
+
+    // il permet de cliquer sur les images
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         holder.setNote(notes.get(position));
