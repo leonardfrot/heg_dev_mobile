@@ -176,7 +176,7 @@ public class CreateNoteActivity extends AppCompatActivity {
                     public void onTimeSet(TimePicker view, int h, int m){
                         calendar.set(Calendar.HOUR_OF_DAY, h);
                         calendar.set(Calendar.MINUTE, m);
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd HH:mm");
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm a");
                         date_time_in.setText(simpleDateFormat.format(calendar.getTime()));
                     }
                 };
@@ -226,6 +226,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         note.setDateTime(textDateTime.getText().toString());
         note.setColor(selectedNoteColor);
         note.setImagePath(selectedImagePath);
+        note.setAlertDate(date_time_in.getText().toString());
 
         if(layoutWebURL.getVisibility() == View.VISIBLE){
             note.setWebLink(textWebURL.getText().toString());

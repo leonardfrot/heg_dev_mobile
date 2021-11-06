@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+// Cette classe permet d'afficher dans la page principale, les notes avec les infos nécessaires.
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder>{
 
     private List<Note> notes;
@@ -39,6 +40,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         notesSource = notes;
     }
 
+    // il permet de récupérer item container note
     @NonNull
     @Override
     public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -70,7 +72,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
     static class NoteViewHolder extends RecyclerView.ViewHolder{
 
-        TextView textTitle, textSubtitle, textDateTime;
+        TextView textTitle, textSubtitle, textDateTime, alertDateTime;
         LinearLayout layoutNote;
         RoundedImageView imageNote;
 
@@ -81,6 +83,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             textDateTime = itemView.findViewById(R.id.textDateTime);
             layoutNote = itemView.findViewById(R.id.layoutNote); //depuis item_container_note
             imageNote = itemView.findViewById(R.id.imageNote);
+            alertDateTime = itemView.findViewById(R.id.alertDateTime);
 
         }
 
@@ -93,7 +96,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             } else {
                 textSubtitle.setText(note.getSubtitle());
             }
-            textDateTime.setText(note.getDateTime());
+            textDateTime.setText("Created in: " + note.getDateTime());
+
+            alertDateTime.setText("Do before: " + note.getAlertDate());
 
             GradientDrawable gradientDrawable = (GradientDrawable) layoutNote.getBackground();
             if (note.getColor() != null){
