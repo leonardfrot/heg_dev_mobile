@@ -43,6 +43,7 @@ import com.example.keepnote.entities.Note;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.io.InputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -210,7 +211,7 @@ public class CreateNoteActivity extends AppCompatActivity {
 
 
 
-    private void saveNote(){
+    private void saveNote() {
         if(inputNoteTitle.getText().toString().trim().isEmpty()){
             Toast.makeText(this, "Note title can't be empty !", Toast.LENGTH_SHORT).show();
             return;
@@ -226,7 +227,20 @@ public class CreateNoteActivity extends AppCompatActivity {
         note.setDateTime(textDateTime.getText().toString());
         note.setColor(selectedNoteColor);
         note.setImagePath(selectedImagePath);
-        note.setAlertDate(date_time_in.getText().toString());
+
+        //on a besoion de comparer 2 dates:
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm a");
+        try {
+            if(sdf.parse(date_time_in.getText().toString()).before(sdf.parse(textDateTime.getText().toString()))) {
+                Toast.makeText(this, "alert Date can't be before today !", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            else{
+                note.setAlertDate(date_time_in.getText().toString());
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         if(layoutWebURL.getVisibility() == View.VISIBLE){
             note.setWebLink(textWebURL.getText().toString());
