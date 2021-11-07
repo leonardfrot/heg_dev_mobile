@@ -6,7 +6,7 @@
 
     <!-- on en a besoin pour communiquer avec la caméra pour ajouter une image -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
+    <!-- on en a besoin pour l'alarme -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application

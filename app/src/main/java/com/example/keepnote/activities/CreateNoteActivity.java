@@ -301,7 +301,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         intent.putExtra("message", message);
         intent.putExtra("timelimit", timelimit);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm a");
 
