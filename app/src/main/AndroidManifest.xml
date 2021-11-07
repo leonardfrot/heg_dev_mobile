@@ -7,6 +7,8 @@
     <!-- on en a besoin pour communiquer avec la caméra pour ajouter une image -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -34,6 +36,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name=".database.AlarmBroadCast"/>
     </application>
 
 </manifest>

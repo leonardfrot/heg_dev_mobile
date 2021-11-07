@@ -9,8 +9,11 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -38,6 +41,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.keepnote.R;
+import com.example.keepnote.database.AlarmBroadCast;
 import com.example.keepnote.database.NotesDatabase;
 import com.example.keepnote.entities.Note;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -226,7 +230,12 @@ public class CreateNoteActivity extends AppCompatActivity {
             return;
         }
         final Note note = new Note();
-        note.setTitle((inputNoteTitle.getText().toString()));
+
+        // on a besoin de ces 2 variables pour passer en paramètre pour l'alerte
+        String title = inputNoteTitle.getText().toString();
+        String timelimit = date_time_in.getText().toString();
+
+        note.setTitle((title));
         note.setSubtitle((inputNoteSubtitle.getText().toString()));
         note.setNoteText(inputNoteText.getText().toString());
         note.setDateTime(textDateTime.getText().toString());
@@ -234,7 +243,9 @@ public class CreateNoteActivity extends AppCompatActivity {
         note.setImagePath(selectedImagePath);
 
         //on a besoion de comparer 2 dates:
+
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm a");
+
         try {
             if(sdf.parse(date_time_in.getText().toString()).before(sdf.parse(textDateTime.getText().toString()))) {
                 Toast.makeText(this, "alert Date can't be before today !", Toast.LENGTH_SHORT).show();
@@ -274,6 +285,34 @@ public class CreateNoteActivity extends AppCompatActivity {
         }
 
         new SaveNoteTask().execute();
+
+        
+        String message = "la date de la note " + title + "est dépassé ";
+        setAlarm(message, timelimit);
+
+    }
+
+    private void setAlarm(String message, String timelimit) {
+
+        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(getApplicationContext(), AlarmBroadCast.class);
+
+        intent.putExtra("message", message);
+        intent.putExtra("timelimit", timelimit);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm a");
+
+        try {
+            Date dateLimit = sdf.parse(timelimit);
+            am.set(AlarmManager.RTC_WAKEUP, dateLimit.getTime(), pendingIntent);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     private void initMiscellaneous(){
@@ -583,6 +622,8 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         dialogAddURL.show();
         }
+
+
 
 
 
