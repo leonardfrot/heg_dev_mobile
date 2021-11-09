@@ -9,6 +9,12 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.DatePickerDialog;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -21,23 +27,29 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.keepnote.R;
+import com.example.keepnote.database.AlarmBroadCast;
 import com.example.keepnote.database.NotesDatabase;
 import com.example.keepnote.entities.Note;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.io.InputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -49,6 +61,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     private ImageView imageNote;
     private TextView textWebURL;
     private LinearLayout layoutWebURL;
+    private EditText date_time_in;
 
     private String selectedNoteColor;
     private String selectedImagePath;
@@ -83,6 +96,9 @@ public class CreateNoteActivity extends AppCompatActivity {
         textWebURL = findViewById(R.id.textWebUrl);
         layoutWebURL = findViewById(R.id.layoutWebURL);
 
+        date_time_in = findViewById(R.id.date_time_imput);
+        date_time_in.setInputType(InputType.TYPE_NULL);
+
         textDateTime.setText(
                 new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm a", Locale.getDefault())
                         .format(new Date())
@@ -100,6 +116,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         selectedNoteColor = "#333333";
         selectedImagePath = "";
 
+        // remplit la note quand l'intent passé depuis le main activity est view ou update
         if(getIntent().getBooleanExtra("isViewOrUpdate", false)){
             alreadyAvailableNote = (Note) getIntent().getSerializableExtra("note");
             setViewOrUpdateNote();
@@ -138,15 +155,52 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         }
 
+        //partie pour chosir la date
+
+        date_time_in.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDateDialog(date_time_in);
+
+            }
+        });
         initMiscellaneous();
         setSubtitleIndicator();
     }
 
+    private void showDateDialog(EditText date_time_in){
+        Calendar calendar = Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int y, int m, int d) {
+                calendar.set(Calendar.YEAR, y);
+                calendar.set(Calendar.MONTH, m);
+                calendar.set(Calendar.DAY_OF_MONTH, d);
+
+                TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener(){
+                    @Override
+                    public void onTimeSet(TimePicker view, int h, int m){
+                        calendar.set(Calendar.HOUR_OF_DAY, h);
+                        calendar.set(Calendar.MINUTE, m);
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm a");
+                        date_time_in.setText(simpleDateFormat.format(calendar.getTime()));
+                    }
+                };
+                new TimePickerDialog(CreateNoteActivity.this, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),false).show();
+
+            }
+        };
+        new DatePickerDialog( CreateNoteActivity.this, dateSetListener, calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    // Cette méthode permet de remettre dans les champs texte, les données des notes lors de vue ou de modification.
     private void setViewOrUpdateNote(){
         inputNoteTitle.setText(alreadyAvailableNote.getTitle());
         inputNoteSubtitle.setText(alreadyAvailableNote.getSubtitle());
         inputNoteText.setText(alreadyAvailableNote.getNoteText());
         textDateTime.setText(alreadyAvailableNote.getDateTime());
+        date_time_in.setText(alreadyAvailableNote.getAlertDate());
 
         if(alreadyAvailableNote.getImagePath() != null && !alreadyAvailableNote.getImagePath().trim().isEmpty()){
             imageNote.setImageBitmap(BitmapFactory.decodeFile(alreadyAvailableNote.getImagePath()));
@@ -160,11 +214,13 @@ public class CreateNoteActivity extends AppCompatActivity {
             layoutWebURL.setVisibility(View.VISIBLE);
         }
 
+
+
     }
 
 
 
-    private void saveNote(){
+    private void saveNote() {
         if(inputNoteTitle.getText().toString().trim().isEmpty()){
             Toast.makeText(this, "Note title can't be empty !", Toast.LENGTH_SHORT).show();
             return;
@@ -174,12 +230,33 @@ public class CreateNoteActivity extends AppCompatActivity {
             return;
         }
         final Note note = new Note();
-        note.setTitle((inputNoteTitle.getText().toString()));
+
+        // on a besoin de ces 2 variables pour passer en paramètre pour l'alerte
+        String title = inputNoteTitle.getText().toString();
+        String timelimit = date_time_in.getText().toString();
+
+        note.setTitle((title));
         note.setSubtitle((inputNoteSubtitle.getText().toString()));
         note.setNoteText(inputNoteText.getText().toString());
         note.setDateTime(textDateTime.getText().toString());
         note.setColor(selectedNoteColor);
         note.setImagePath(selectedImagePath);
+
+        //on a besoion de comparer 2 dates:
+
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm a");
+
+        try {
+            if(sdf.parse(date_time_in.getText().toString()).before(sdf.parse(textDateTime.getText().toString()))) {
+                Toast.makeText(this, "alert Date can't be before today !", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            else{
+                note.setAlertDate(date_time_in.getText().toString());
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         if(layoutWebURL.getVisibility() == View.VISIBLE){
             note.setWebLink(textWebURL.getText().toString());
@@ -208,6 +285,34 @@ public class CreateNoteActivity extends AppCompatActivity {
         }
 
         new SaveNoteTask().execute();
+
+        
+        String message = "la date de la note " + title + "est dépassé ";
+        setAlarm(message, timelimit);
+
+    }
+
+    private void setAlarm(String message, String timelimit) {
+
+        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(getApplicationContext(), AlarmBroadCast.class);
+
+        intent.putExtra("message", message);
+        intent.putExtra("timelimit", timelimit);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm a");
+
+        try {
+            Date dateLimit = sdf.parse(timelimit);
+            am.set(AlarmManager.RTC_WAKEUP, dateLimit.getTime(), pendingIntent);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     private void initMiscellaneous(){
@@ -517,6 +622,10 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         dialogAddURL.show();
         }
+
+
+
+
 
     }
 

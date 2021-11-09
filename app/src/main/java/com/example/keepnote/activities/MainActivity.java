@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
     private RecyclerView notesRecyclerView;
     private List<Note> noteList;
     private NotesAdapter notesAdapter;
+    private NotesDatabase notesDatabase;
 
     private int noteClickedPosition = -1;
 
@@ -180,6 +181,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
 
     }
 
+    //Cette méthode est appelé à la création de la page utilisateur pour avoir les notes.
     private void getNotes(final int requestCode, final boolean isNoteDeleted) {
 
         @SuppressLint("StaticFieldLeak")

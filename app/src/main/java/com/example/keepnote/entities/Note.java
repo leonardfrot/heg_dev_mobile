@@ -1,11 +1,13 @@
 package com.example.keepnote.entities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity(tableName = "notes")
 public class Note implements Serializable {
@@ -32,6 +34,11 @@ public class Note implements Serializable {
 
     @ColumnInfo(name="web_link")
     private String webLink;
+
+    @ColumnInfo(name="alert_date")
+    private String alertDate;
+
+
 
     public int getId() {
         return id;
@@ -95,6 +102,15 @@ public class Note implements Serializable {
 
     public void setWebLink(String webLink) {
         this.webLink = webLink;
+    }
+
+    @Nullable
+    public String getAlertDate() {
+        return alertDate;
+    }
+
+    public void setAlertDate(@Nullable String alertDate) {
+        this.alertDate = alertDate;
     }
 
     @NonNull
