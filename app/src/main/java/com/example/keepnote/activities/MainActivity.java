@@ -2,6 +2,7 @@ package com.example.keepnote.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
     public static final int REQUEST_CODE_SHOW_NOTES = 3;
     public static final int REQUEST_CODE_SELECT_IMAGE = 4;
     public static final int REQUEST_CODE_STORAGE_PERMISSION = 5;
+    public static final int REQUEST_CODE_TRASH = 6;
 
     private RecyclerView notesRecyclerView;
     private List<Note> noteList;
@@ -131,6 +133,17 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
             @Override
             public void onClick(View v) {
                 showAddURLDialog();
+            }
+        });
+
+        ImageView imageTrash = findViewById(R.id.imageTrash);
+        imageTrash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(
+                        new Intent(getApplicationContext(), TrashActivity.class),
+                        REQUEST_CODE_TRASH
+                );
             }
         });
     }

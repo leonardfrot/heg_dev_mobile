@@ -241,6 +241,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         note.setDateTime(textDateTime.getText().toString());
         note.setColor(selectedNoteColor);
         note.setImagePath(selectedImagePath);
+        note.setDeleteDate(false);
 
         //on a besoion de comparer 2 dates:
 
@@ -460,7 +461,7 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         }
 
-      private void showDeleteNoteDialog(){
+    private void showDeleteNoteDialog(){
         if (dialogDeleteNote == null){
             AlertDialog.Builder builder = new AlertDialog.Builder(CreateNoteActivity.this);
             View view = LayoutInflater.from(this).inflate(
@@ -481,8 +482,7 @@ public class CreateNoteActivity extends AppCompatActivity {
 
                         @Override
                         protected Void doInBackground(Void... voids) {
-                            NotesDatabase.getDatabase(getApplicationContext()).noteDao()
-                                    .deleteNote(alreadyAvailableNote);
+                            alreadyAvailableNote.setDeleteDate(true);
                             return null;
                         }
 
@@ -509,9 +509,9 @@ public class CreateNoteActivity extends AppCompatActivity {
             });
 
         }
-            dialogDeleteNote.show();
+        dialogDeleteNote.show();
 
-      }
+    }
 
     private void setSubtitleIndicator(){
         GradientDrawable gradientDrawable = (GradientDrawable) viewSubtitleIndicator.getBackground();
@@ -622,11 +622,6 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         dialogAddURL.show();
         }
-
-
-
-
-
     }
 
 

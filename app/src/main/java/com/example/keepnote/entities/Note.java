@@ -1,5 +1,7 @@
 package com.example.keepnote.entities;
 
+import android.security.keystore.BackendBusyException;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
@@ -7,7 +9,6 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 
 @Entity(tableName = "notes")
 public class Note implements Serializable {
@@ -38,7 +39,8 @@ public class Note implements Serializable {
     @ColumnInfo(name="alert_date")
     private String alertDate;
 
-
+    @ColumnInfo(name="delete_date")
+    private boolean deleteDate;
 
     public int getId() {
         return id;
@@ -111,6 +113,14 @@ public class Note implements Serializable {
 
     public void setAlertDate(@Nullable String alertDate) {
         this.alertDate = alertDate;
+    }
+
+    public Boolean getDeleteDate() {
+        return deleteDate;
+    }
+
+    public void setDeleteDate(boolean deleteDate) {
+        this.deleteDate = deleteDate;
     }
 
     @NonNull
