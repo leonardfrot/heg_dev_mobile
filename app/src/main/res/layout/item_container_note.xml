@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!-- Dans ce layout, on paramètre l'affichage des notes sur l'écran principal
- avec le titre, le sous-titre et la date -->
+ avec le titre, le sous-titre et la date et la date de notif -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layoutNote"

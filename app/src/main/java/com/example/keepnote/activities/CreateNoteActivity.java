@@ -213,9 +213,6 @@ public class CreateNoteActivity extends AppCompatActivity {
             textWebURL.setText(alreadyAvailableNote.getWebLink());
             layoutWebURL.setVisibility(View.VISIBLE);
         }
-
-
-
     }
 
 
@@ -287,7 +284,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         new SaveNoteTask().execute();
 
         
-        String message = "la date de la note " + title + "est dépassé ";
+        String message = "la date de la note " + title + "est échue ";
         setAlarm(message, timelimit);
 
     }
@@ -311,8 +308,6 @@ public class CreateNoteActivity extends AppCompatActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-
     }
 
     private void initMiscellaneous(){
@@ -421,6 +416,7 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         }
 
+        //Quand on veut ajouter une image, on vérifie que l'application a les droit d'accéder à la galerie
         layoutMiscellaneous.findViewById(R.id.layoutAddImage).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -439,6 +435,7 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         });
 
+        //Ouvre la boite de dialogue d'ajout d'un URL
         layoutMiscellaneous.findViewById(R.id.layoutAddUrl).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -447,6 +444,8 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         });
 
+        //Permer d'ouvrir la boite de dialogue pour effacer la note
+        //Cette option s'affiche uniquement si la note existe déjà
         if(alreadyAvailableNote != null){
             layoutMiscellaneous.findViewById(R.id.layoutDeleteNote).setVisibility(View.VISIBLE);
             layoutMiscellaneous.findViewById(R.id.layoutDeleteNote).setOnClickListener(new View.OnClickListener() {
@@ -460,6 +459,7 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         }
 
+        //méthode d'affichage de la boite de dialogue effacer note
       private void showDeleteNoteDialog(){
         if (dialogDeleteNote == null){
             AlertDialog.Builder builder = new AlertDialog.Builder(CreateNoteActivity.this);
@@ -472,6 +472,7 @@ public class CreateNoteActivity extends AppCompatActivity {
             if(dialogDeleteNote.getWindow() != null){
                 dialogDeleteNote.getWindow().setBackgroundDrawable(new ColorDrawable(0));
             }
+            //Si on appuie sur confirmer l'effacement, on supprime notre note dans la DB
             view.findViewById(R.id.textDeleteNote).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -501,6 +502,7 @@ public class CreateNoteActivity extends AppCompatActivity {
                 }
             });
 
+            //Si on appuye sur annuler, on ferme la boite de dialogue sans rien faire
             view.findViewById(R.id.textCancel).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -622,11 +624,6 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         dialogAddURL.show();
         }
-
-
-
-
-
     }
 
 

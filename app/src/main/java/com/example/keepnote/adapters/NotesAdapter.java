@@ -50,7 +50,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     }
 
 
-    // il permet de cliquer sur les images
+    // il permet de cliquer sur les images/notes
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         holder.setNote(notes.get(position));
@@ -90,7 +90,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         }
 
 
-        // cette méthdoe permet d'afficher les informations sauvegardés dans les note, notamment l'image
+        // cette méthdoe permet d'afficher les informations sauvegardés dans les notes, notamment l'image
         void setNote(Note note){
             textTitle.setText(note.getTitle());
             if(note.getSubtitle().trim().isEmpty()){
@@ -98,9 +98,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             } else {
                 textSubtitle.setText(note.getSubtitle());
             }
-            textDateTime.setText("Created in: " + note.getDateTime());
+            textDateTime.setText("Crée le : " + note.getDateTime());
 
-            alertDateTime.setText("Do before: " + note.getAlertDate());
+            alertDateTime.setText("A faire avant le : " + note.getAlertDate());
 
             GradientDrawable gradientDrawable = (GradientDrawable) layoutNote.getBackground();
             if (note.getColor() != null){
@@ -117,6 +117,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         }
     }
 
+    //Permet de rechercher un mot dans le titre, sous-titre, texte d'une note
     public void searchNotes (final String searchKeyword) {
         timer = new Timer();
         timer.schedule(new TimerTask() {

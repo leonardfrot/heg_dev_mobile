@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
     private RecyclerView notesRecyclerView;
     private List<Note> noteList;
     private NotesAdapter notesAdapter;
-    private NotesDatabase notesDatabase;
+    private NotesDatabase notesDatabase; //pas utilisé
 
     private int noteClickedPosition = -1;
 
@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
             }
         });
 
+        //on affiche les notes de façon vertical sur 2 colonnes
         notesRecyclerView = findViewById(R.id.notesRecyclerView);
         notesRecyclerView.setLayoutManager(
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
@@ -100,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
             }
         });
 
+        //permet d'ajouter une note grace au petit symbole "+" en bas à gauche
         findViewById(R.id.ImageAddNote).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
             }
         });
 
+        //permet d'ajouter une image depuis l'icone image en bas à gauche
         findViewById(R.id.ImageAddImage).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
             }
         });
 
+        //permet d'ajouter un lien url dans la note depuis le logo "internet" en bas à gauche
         findViewById(R.id.ImageAddWebLink).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
         });
     }
 
+    //Méthode de sélection d'une image dans le téléphone
     private void selectImage(){
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         if (intent.resolveActivity(getPackageManager())!=null){
@@ -143,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
 
     }
 
+    //Contrôle des permission pour l'accès aux images du téléphone
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -244,6 +250,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
         }
     }
 
+    //Permet d'afficher la boite de dialogue d'ajout une url
     private void showAddURLDialog(){
         if(dialogAddURL==null){
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);

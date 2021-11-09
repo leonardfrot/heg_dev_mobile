@@ -10,6 +10,7 @@ import com.example.keepnote.R;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
+    //Définition du temps d'affichage du splashScreen en ms
     private final int SPLASH_SCREEN_TIMEOUT = 3000;
 
     @Override
@@ -20,7 +21,6 @@ public class SplashScreenActivity extends AppCompatActivity {
         // rediriger vers la page principale "MainActivity" après 3 secondes.
 
 
-        // handler post delayed
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
