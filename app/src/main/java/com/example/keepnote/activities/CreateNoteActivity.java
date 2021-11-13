@@ -44,6 +44,7 @@ import com.example.keepnote.R;
 import com.example.keepnote.database.AlarmBroadCast;
 import com.example.keepnote.database.NotesDatabase;
 import com.example.keepnote.entities.Note;
+import com.example.keepnote.notifications.NotificationHelper;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.io.InputStream;
@@ -302,9 +303,14 @@ public class CreateNoteActivity extends AppCompatActivity {
         AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         Intent intent = new Intent(getApplicationContext(), AlarmBroadCast.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("note", note);
+        intent.putExtra("bundle", bundle);
 
         intent.putExtra("message", message);
         intent.putExtra("timelimit", timelimit);
+
+
 
         //obligé de créer un Bundle pour passer un objet en paramètre, sinon null pointer Exception
 

@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
@@ -24,6 +25,8 @@ public class NotificationHelper extends ContextWrapper {
     public static final String channelName = "Channel";
 
     private NotificationManager manager;
+
+
 
     public NotificationHelper(Context base) {
         super(base);
@@ -62,7 +65,6 @@ public class NotificationHelper extends ContextWrapper {
         intent.putExtra("note", note);
 
         System.out.println(note);
-
 
         PendingIntent pd = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 

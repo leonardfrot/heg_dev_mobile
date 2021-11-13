@@ -17,15 +17,14 @@ public class AlarmBroadCast extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         Bundle b = intent.getExtras();
+        Bundle b2 = intent.getBundleExtra("bundle");
+
+        Note note = (Note)b2.getSerializable("note");
 
         NotificationHelper helper = new NotificationHelper(context);
 
-
-        if (b!= null){
-            Note note = (Note) b.getSerializable("note");
-            NotificationCompat.Builder nb = helper.getChannel1Notification(b.getString("titre"), b.getString("message"), note);
-            helper.getManager().notify(0, nb.build());
-        }
+        NotificationCompat.Builder nb = helper.getChannel1Notification(b.getString("titre"), b.getString("message"), note);
+        helper.getManager().notify(0, nb.build());
 
 
 
