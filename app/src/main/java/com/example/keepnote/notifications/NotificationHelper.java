@@ -4,8 +4,10 @@ import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
@@ -13,6 +15,7 @@ import androidx.core.app.NotificationCompat;
 
 
 import com.example.keepnote.R;
+import com.example.keepnote.activities.CreateNoteActivity;
 
 public class NotificationHelper extends ContextWrapper {
 
@@ -38,6 +41,7 @@ public class NotificationHelper extends ContextWrapper {
         channel.setLightColor(R.color.colorPrimary);
         channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
 
+
         getManager().createNotificationChannel(channel);
     }
 
@@ -49,12 +53,21 @@ public class NotificationHelper extends ContextWrapper {
         return manager;
     }
 
+    // construction de la notification de la chaine 1, ici nous n'avons qu'une seule chaine
     public NotificationCompat.Builder getChannel1Notification(String title, String message){
+
+        Intent intent = new Intent(this, CreateNoteActivity.class);
+        PendingIntent pd = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+
         return new NotificationCompat.Builder(getApplicationContext(), channelID)
                 .setContentTitle(title)
                 .setContentText(message)
-                .setSmallIcon(R.drawable.ic_image);
-    }
+                .setSmallIcon(R.drawable.ic_image)
+                .setAutoCancel(true)
+                .setContentIntent(pd);
 
+    }
 
 }

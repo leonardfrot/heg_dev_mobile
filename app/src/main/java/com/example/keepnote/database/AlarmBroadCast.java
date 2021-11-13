@@ -21,7 +21,7 @@ public class AlarmBroadCast extends BroadcastReceiver {
 
         NotificationCompat.Builder nb = helper.getChannel1Notification(b.getString("titre"), b.getString("message"));
 
-        helper.getManager().notify(1, nb.build());
+        helper.getManager().notify(0, nb.build());
 
     }
 }
