@@ -56,6 +56,7 @@ public class NotificationHelper extends ContextWrapper {
     // construction de la notification de la chaine 1, ici nous n'avons qu'une seule chaine
     public NotificationCompat.Builder getChannel1Notification(String title, String message){
 
+        // c'est la qu'on décide quelle activité on doit vourrir
         Intent intent = new Intent(this, CreateNoteActivity.class);
 
         PendingIntent pd = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
