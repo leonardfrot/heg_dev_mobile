@@ -74,7 +74,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
     static class NoteViewHolder extends RecyclerView.ViewHolder{
 
-        TextView textTitle, textSubtitle, textDateTime, alertDateTime;
+        TextView textTitle, textSubtitle, textDateTime, alertDateTime, deleteDateTime;
         LinearLayout layoutNote;
         RoundedImageView imageNote;
 
@@ -86,6 +86,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             layoutNote = itemView.findViewById(R.id.layoutNote); //depuis item_container_note
             imageNote = itemView.findViewById(R.id.imageNote);
             alertDateTime = itemView.findViewById(R.id.alertDateTime);
+            deleteDateTime = itemView.findViewById(R.id.deleteDateTime);
 
         }
 
@@ -101,6 +102,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             textDateTime.setText("Created in: " + note.getDateTime());
 
             alertDateTime.setText("Do before: " + note.getAlertDate());
+
+            //deleteDateTime.setText(note.getDeleteDate()).toString();
 
             GradientDrawable gradientDrawable = (GradientDrawable) layoutNote.getBackground();
             if (note.getColor() != null){

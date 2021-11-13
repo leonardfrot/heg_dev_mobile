@@ -33,15 +33,12 @@ public class TrashActivity extends AppCompatActivity implements NotesListener {
 
     private AlertDialog dialogDeleteNote;
 
-    private Note alreadyAvailableNote;
-    private CreateNoteActivity CreateNoteActivity;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trash);
 
-        ImageView imageBack = findViewById(R.id.imageBack);
+        ImageView imageBack = findViewById(R.id.imageTrashBack);
         imageBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,7 +55,7 @@ public class TrashActivity extends AppCompatActivity implements NotesListener {
         notesAdapter = new NotesAdapter(noteList, this);
         notesTrashRecyclerView.setAdapter(notesAdapter);
 
-        //@SuppressLint("StaticFieldLeak")
+        @SuppressLint("StaticFieldLeak")
         class GetNotesTask extends AsyncTask<Void, Void, List<Note>> {
 
             @Override
@@ -70,7 +67,7 @@ public class TrashActivity extends AppCompatActivity implements NotesListener {
             protected void onPostExecute(List<Note> notes) {
                 noteList.addAll(notes);
                 for (Note note : noteList) {
-                    if (note.getDeleteDate().equals(true)) {
+                    if (note.getDeleteDate() == true) {
                         noteTrashList.add(note);
                     }
                 }
@@ -78,32 +75,76 @@ public class TrashActivity extends AppCompatActivity implements NotesListener {
                 notesAdapter.notifyDataSetChanged();
             }
         }
+
         new GetNotesTask().execute();
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
+
+    @Override
     public void onNoteClicked(Note note, int position) {
-
-        @SuppressLint("StaticFieldLeak")
-        class DeleteNote extends AsyncTask<Void, Void, Void>{
-
-            @Override
-            protected Void doInBackground(Void... voids) {
-                NotesDatabase.getDatabase(getApplicationContext()).noteDao()
-                        .deleteNote(note);
-                return null;
+        if (dialogDeleteNote == null){
+            AlertDialog.Builder builder = new AlertDialog.Builder(TrashActivity.this);
+            View view = LayoutInflater.from(this).inflate(
+                    R.layout.layout_note_trash,
+                    (ViewGroup)  findViewById(R.id.layoutNoteTrashContainer)
+            );
+            builder.setView(view);
+            dialogDeleteNote = builder.create();
+            if(dialogDeleteNote.getWindow() != null){
+                dialogDeleteNote.getWindow().setBackgroundDrawable(new ColorDrawable(0));
             }
 
-            @Override
-            protected void onPostExecute(Void unused) {
-                super.onPostExecute(unused);
-                Intent intent = new Intent();
-                intent.putExtra("isNoteDeleted", true);
-                setResult(RESULT_OK, intent);
-                finish();
-            }
+            view.findViewById(R.id.textDeleteNote).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    @SuppressLint("StaticFieldLeak")
+                    class DeleteNoteTask extends AsyncTask<Void, Void, Void>{
+
+                        @Override
+                        protected Void doInBackground(Void... voids) {
+                            NotesDatabase.getDatabase(getApplicationContext()).noteDao()
+                                    .deleteNote(note);
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void unused) {
+                            super.onPostExecute(unused);
+                            Intent intent = new Intent();
+                            intent.putExtra("isNoteDeleted", true);
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        }
+                    }
+
+                    new DeleteNoteTask().execute();
+
+                }
+            });
+
+            view.findViewById(R.id.textCancel).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialogDeleteNote.dismiss();
+                }
+            });
+
+            view.findViewById(R.id.textRecover).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                    note.setDeleteDate(false);
+                }
+            });
+
+            dialogDeleteNote.show();
         }
-
-        new DeleteNote().execute();
     }
 }

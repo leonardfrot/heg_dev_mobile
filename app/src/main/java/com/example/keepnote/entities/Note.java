@@ -115,7 +115,7 @@ public class Note implements Serializable {
         this.alertDate = alertDate;
     }
 
-    public Boolean getDeleteDate() {
+    public boolean getDeleteDate() {
         return deleteDate;
     }
 
