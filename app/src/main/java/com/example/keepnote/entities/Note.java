@@ -1,5 +1,7 @@
 package com.example.keepnote.entities;
 
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
@@ -10,6 +12,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity(tableName = "notes")
+// il implémente Seriablizable pour pouvoir passer l'objet note avec les intents
 public class Note implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int id;

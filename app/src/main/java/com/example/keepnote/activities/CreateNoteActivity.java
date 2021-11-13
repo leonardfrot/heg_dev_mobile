@@ -288,11 +288,16 @@ public class CreateNoteActivity extends AppCompatActivity {
 
         
         String message = "la date de la note " + title + "est dépassé ";
-        setAlarm(message, timelimit);
+        setAlarm(message, timelimit, note);
+
+        System.out.println(note);
 
     }
 
-    private void setAlarm(String message, String timelimit) {
+    private void setAlarm(String message, String timelimit, Note note) {
+
+        // la note n'est pas null jusqu'ici
+        System.out.println(note);
 
         AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
@@ -300,6 +305,8 @@ public class CreateNoteActivity extends AppCompatActivity {
 
         intent.putExtra("message", message);
         intent.putExtra("timelimit", timelimit);
+
+        //obligé de créer un Bundle pour passer un objet en paramètre, sinon null pointer Exception
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 

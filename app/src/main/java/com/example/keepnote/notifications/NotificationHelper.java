@@ -16,6 +16,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.keepnote.R;
 import com.example.keepnote.activities.CreateNoteActivity;
+import com.example.keepnote.entities.Note;
 
 public class NotificationHelper extends ContextWrapper {
 
@@ -41,7 +42,6 @@ public class NotificationHelper extends ContextWrapper {
         channel.setLightColor(R.color.colorPrimary);
         channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
 
-
         getManager().createNotificationChannel(channel);
     }
 
@@ -54,14 +54,17 @@ public class NotificationHelper extends ContextWrapper {
     }
 
     // construction de la notification de la chaine 1, ici nous n'avons qu'une seule chaine
-    public NotificationCompat.Builder getChannel1Notification(String title, String message){
+    public NotificationCompat.Builder getChannel1Notification(String title, String message, Note note){
 
-        // c'est la qu'on décide quelle activité on doit vourrir
+        // c'est la qu'on décide quelle activité on doit ourrir, on remet la note en paramètre qui arrive jusqu'ici depuis saveNote au début
         Intent intent = new Intent(this, CreateNoteActivity.class);
+        intent.putExtra("isViewOrUpdate", true);
+        intent.putExtra("note", note);
+
+        System.out.println(note);
+
 
         PendingIntent pd = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-
 
         return new NotificationCompat.Builder(getApplicationContext(), channelID)
                 .setContentTitle(title)
