@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -56,9 +57,9 @@ import java.util.Locale;
 
 public class CreateNoteActivity extends AppCompatActivity {
 
+    private CoordinatorLayout mainLayout;
     private EditText inputNoteTitle, inputNoteSubtitle, inputNoteText;
     private TextView textDateTime;
-    private View viewSubtitleIndicator;
     private ImageView imageNote;
     private TextView textWebURL;
     private LinearLayout layoutWebURL;
@@ -88,11 +89,11 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         });
 
+        mainLayout = findViewById(R.id.mainlayout);
         inputNoteTitle = findViewById(R.id.inputNoteTitle);
         inputNoteSubtitle = findViewById(R.id.inputNoteSubtitle);
         inputNoteText = findViewById(R.id.inputNote);
         textDateTime = findViewById(R.id.textDateTime);
-        viewSubtitleIndicator = findViewById(R.id.viewSubtitleIndicator);
         imageNote = findViewById(R.id.imageNote);
         textWebURL = findViewById(R.id.textWebUrl);
         layoutWebURL = findViewById(R.id.layoutWebURL);
@@ -166,7 +167,7 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         });
         initMiscellaneous();
-        setSubtitleIndicator();
+        setBackground();
     }
 
     private void showDateDialog(EditText date_time_in){
@@ -214,12 +215,7 @@ public class CreateNoteActivity extends AppCompatActivity {
             textWebURL.setText(alreadyAvailableNote.getWebLink());
             layoutWebURL.setVisibility(View.VISIBLE);
         }
-
-
-
     }
-
-
 
     private void saveNote() {
         if(inputNoteTitle.getText().toString().trim().isEmpty()){
@@ -310,8 +306,6 @@ public class CreateNoteActivity extends AppCompatActivity {
         intent.putExtra("message", message);
         intent.putExtra("timelimit", timelimit);
 
-
-
         //obligé de créer un Bundle pour passer un objet en paramètre, sinon null pointer Exception
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -361,7 +355,7 @@ public class CreateNoteActivity extends AppCompatActivity {
                 imageColor3.setImageResource(0);
                 imageColor4.setImageResource(0);
                 imageColor5.setImageResource(0);
-                setSubtitleIndicator();
+                setBackground();
             }
         });
 
@@ -374,7 +368,7 @@ public class CreateNoteActivity extends AppCompatActivity {
                 imageColor3.setImageResource(0);
                 imageColor4.setImageResource(0);
                 imageColor5.setImageResource(0);
-                setSubtitleIndicator();
+                setBackground();
             }
         });
 
@@ -387,7 +381,7 @@ public class CreateNoteActivity extends AppCompatActivity {
                 imageColor3.setImageResource(R.drawable.ic_done);
                 imageColor4.setImageResource(0);
                 imageColor5.setImageResource(0);
-                setSubtitleIndicator();
+                setBackground();
             }
         });
 
@@ -400,7 +394,7 @@ public class CreateNoteActivity extends AppCompatActivity {
                 imageColor3.setImageResource(0);
                 imageColor4.setImageResource(R.drawable.ic_done);
                 imageColor5.setImageResource(0);
-                setSubtitleIndicator();
+                setBackground();
             }
         });
 
@@ -413,7 +407,7 @@ public class CreateNoteActivity extends AppCompatActivity {
                 imageColor3.setImageResource(0);
                 imageColor4.setImageResource(0);
                 imageColor5.setImageResource(R.drawable.ic_done);
-                setSubtitleIndicator();
+                setBackground();
             }
         });
 
@@ -526,9 +520,8 @@ public class CreateNoteActivity extends AppCompatActivity {
 
       }
 
-    private void setSubtitleIndicator(){
-        GradientDrawable gradientDrawable = (GradientDrawable) viewSubtitleIndicator.getBackground();
-        gradientDrawable.setColor(Color.parseColor(selectedNoteColor));
+    private void setBackground(){
+        mainLayout.setBackgroundColor(Color.parseColor(selectedNoteColor));
     }
 
     private void selectImage(){
