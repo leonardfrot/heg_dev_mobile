@@ -47,6 +47,8 @@ import com.example.keepnote.database.NotesDatabase;
 import com.example.keepnote.entities.Note;
 import com.example.keepnote.notifications.NotificationHelper;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.hootsuite.nachos.NachoTextView;
+import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 
 import java.io.InputStream;
 import java.text.ParseException;
@@ -67,6 +69,9 @@ public class CreateNoteActivity extends AppCompatActivity {
 
     private String selectedNoteColor;
     private String selectedImagePath;
+
+    //librairie pour le tag
+    private NachoTextView nacho;
 
     private static final int REQUEST_CODE_STORAGE_PERMISSION = 1;
     private static final int REQUEST_CODE_SELECT_IMAGE = 2;
@@ -97,6 +102,9 @@ public class CreateNoteActivity extends AppCompatActivity {
         imageNote = findViewById(R.id.imageNote);
         textWebURL = findViewById(R.id.textWebUrl);
         layoutWebURL = findViewById(R.id.layoutWebURL);
+
+        nacho = findViewById(R.id.et_tag);
+        nacho.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
 
         date_time_in = findViewById(R.id.date_time_imput);
         date_time_in.setInputType(InputType.TYPE_NULL);

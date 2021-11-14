@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
 
     private AlertDialog dialogAddURL;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
