@@ -52,8 +52,8 @@ public class TrashActivity extends AppCompatActivity implements NotesListener {
         );
 
         noteList = new ArrayList<>();
-        notesAdapter = new NotesAdapter(noteList, this);
-        notesTrashRecyclerView.setAdapter(notesAdapter);
+        noteTrashList = new ArrayList<>();
+
 
         @SuppressLint("StaticFieldLeak")
         class GetNotesTask extends AsyncTask<Void, Void, List<Note>> {
@@ -67,16 +67,19 @@ public class TrashActivity extends AppCompatActivity implements NotesListener {
             protected void onPostExecute(List<Note> notes) {
                 noteList.addAll(notes);
                 for (Note note : noteList) {
-                    if (note.getDeleteDate() == true) {
+                    if (note.getDeleteDate()) {
                         noteTrashList.add(note);
                     }
                 }
-                super.onPostExecute(noteTrashList);
+                super.onPostExecute(noteList);
                 notesAdapter.notifyDataSetChanged();
             }
-        }
 
+        }
         new GetNotesTask().execute();
+
+        notesAdapter = new NotesAdapter(noteTrashList, this);
+        notesTrashRecyclerView.setAdapter(notesAdapter);
     }
 
     @Override

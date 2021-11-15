@@ -62,6 +62,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     private TextView textWebURL;
     private LinearLayout layoutWebURL;
     private EditText date_time_in;
+    private boolean delete_date;
 
     private String selectedNoteColor;
     private String selectedImagePath;
@@ -103,6 +104,8 @@ public class CreateNoteActivity extends AppCompatActivity {
                 new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm a", Locale.getDefault())
                         .format(new Date())
         );
+
+        delete_date = false;
 
         ImageView imageSave = findViewById(R.id.imageSave);
         imageSave.setOnClickListener(new View.OnClickListener() {
@@ -266,6 +269,8 @@ public class CreateNoteActivity extends AppCompatActivity {
         if(alreadyAvailableNote != null){
             note.setId(alreadyAvailableNote.getId());
         }
+
+        alreadyAvailableNote = note;
 
         @SuppressLint("StaticFieldLeak")
         class SaveNoteTask extends AsyncTask<Void, Void, Void>{

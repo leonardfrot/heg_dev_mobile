@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
 
     private RecyclerView notesRecyclerView;
     private List<Note> noteList;
+    private List<Note> noteNotTrashList;
     private NotesAdapter notesAdapter;
     private NotesDatabase notesDatabase;
 
@@ -75,10 +76,6 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
         notesRecyclerView.setLayoutManager(
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         );
-
-        noteList = new ArrayList<>();
-        notesAdapter = new NotesAdapter(noteList, this);
-        notesRecyclerView.setAdapter(notesAdapter);
 
         getNotes(REQUEST_CODE_SHOW_NOTES, false);
 
@@ -197,6 +194,9 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
     //Cette méthode est appelé à la création de la page utilisateur pour avoir les notes.
     private void getNotes(final int requestCode, final boolean isNoteDeleted) {
 
+        noteList = new ArrayList<>();
+        noteNotTrashList = new ArrayList<>();
+
         @SuppressLint("StaticFieldLeak")
         class GetNotesTask extends AsyncTask<Void, Void, List<Note>> {
 
@@ -210,6 +210,11 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                 super.onPostExecute(notes);
                 if(requestCode == REQUEST_CODE_SHOW_NOTES){
                     noteList.addAll(notes);
+                    for (Note note : noteList) {
+                        if (!note.getDeleteDate()) {
+                            noteNotTrashList.add(note);
+                        }
+                    }
                     notesAdapter.notifyDataSetChanged();
                 }else if(requestCode == REQUEST_CODE_ADD_NOTE){
                     noteList.add(0, notes.get(0));
@@ -228,6 +233,9 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
             }
         }
         new GetNotesTask().execute();
+
+        notesAdapter = new NotesAdapter(noteNotTrashList, this);
+        notesRecyclerView.setAdapter(notesAdapter);
     }
 
     @Override

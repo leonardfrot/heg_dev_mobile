@@ -103,7 +103,11 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
             alertDateTime.setText("Do before: " + note.getAlertDate());
 
-            //deleteDateTime.setText(note.getDeleteDate()).toString();
+            if (note.getDeleteDate()){
+                deleteDateTime.setText("true");
+            } else {
+                deleteDateTime.setText("false");
+            }
 
             GradientDrawable gradientDrawable = (GradientDrawable) layoutNote.getBackground();
             if (note.getColor() != null){

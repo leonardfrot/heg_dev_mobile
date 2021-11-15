@@ -1,7 +1,5 @@
 package com.example.keepnote.entities;
 
-import android.security.keystore.BackendBusyException;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
