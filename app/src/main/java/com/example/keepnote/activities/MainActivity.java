@@ -177,6 +177,8 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
         return filePath;
     }
 
+
+    // cette méthode est pour afficher la note quand on veut voir ou modifier la note.
     @Override
     public void onNoteClicked(Note note, int position) {
         noteClickedPosition = position;
@@ -198,6 +200,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                 return NotesDatabase.getDatabase(getApplicationContext()).noteDao().getAllNotes();
             }
 
+            // en fonction du code passé en paramètre il va réagir différemment
             @Override
             protected void onPostExecute(List<Note> notes) {
                 super.onPostExecute(notes);
@@ -208,6 +211,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                     noteList.add(0, notes.get(0));
                     notesAdapter.notifyItemInserted(0);
                     notesRecyclerView.smoothScrollToPosition(0);
+                    // on supprime la note avant de le remettre à la position voulue
                 }else if (requestCode == REQUEST_CODE_UPDATE_NOTE){
                     noteList.remove(noteClickedPosition);
                     if(isNoteDeleted){
