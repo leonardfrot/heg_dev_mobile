@@ -7,14 +7,17 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.example.keepnote.entities.Note;
+import com.example.keepnote.entities.Tag;
 
 import java.util.List;
+import java.util.Map;
 
 @Dao
 public interface NoteDAO {
 
     @Query("SELECT * FROM notes ORDER BY id DESC")
     List<Note> getAllNotes();
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertNote(Note note);
