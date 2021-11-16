@@ -219,11 +219,11 @@ public class CreateNoteActivity extends AppCompatActivity {
 
     private void saveNote() {
         if(inputNoteTitle.getText().toString().trim().isEmpty()){
-            Toast.makeText(this, "Note title can't be empty !", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Titre ne doit pas être vide !", Toast.LENGTH_SHORT).show();
             return;
         } else if(inputNoteSubtitle.getText().toString().trim().isEmpty()
                 && inputNoteText.getText().toString().trim().isEmpty()){
-            Toast.makeText(this, "Note can't be empty !", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Note ne doit pas être vide !", Toast.LENGTH_SHORT).show();
             return;
         }
         final Note note = new Note();
@@ -344,6 +344,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         final ImageView imageColor4 = layoutMiscellaneous.findViewById(R.id.imageColor4);
         final ImageView imageColor5 = layoutMiscellaneous.findViewById(R.id.imageColor5);
 
+        //couleur grise
         layoutMiscellaneous.findViewById(R.id.viewColor1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -357,10 +358,11 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         });
 
+        // Couleur jaune
         layoutMiscellaneous.findViewById(R.id.viewColor2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectedNoteColor = "#FDBE3B";
+                selectedNoteColor = "#ff9717";
                 imageColor1.setImageResource(0);
                 imageColor2.setImageResource(R.drawable.ic_done);
                 imageColor3.setImageResource(0);
@@ -370,10 +372,11 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         });
 
+        // Couleur rouge
         layoutMiscellaneous.findViewById(R.id.viewColor3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectedNoteColor = "#FF4842";
+                selectedNoteColor = "#e65e5e";
                 imageColor1.setImageResource(0);
                 imageColor2.setImageResource(0);
                 imageColor3.setImageResource(R.drawable.ic_done);
@@ -383,10 +386,11 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         });
 
+        // Couleur bleue
         layoutMiscellaneous.findViewById(R.id.viewColor4).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectedNoteColor = "#3A52FC";
+                selectedNoteColor = "#58a7db";
                 imageColor1.setImageResource(0);
                 imageColor2.setImageResource(0);
                 imageColor3.setImageResource(0);
@@ -396,6 +400,7 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         });
 
+        // Couleur noire
         layoutMiscellaneous.findViewById(R.id.viewColor5).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -411,13 +416,13 @@ public class CreateNoteActivity extends AppCompatActivity {
 
         if(alreadyAvailableNote != null && alreadyAvailableNote.getColor() != null && !alreadyAvailableNote.getColor().trim().isEmpty()){
             switch (alreadyAvailableNote.getColor()){
-                case "#FDBE3B":
+                case "#ff9717":
                     layoutMiscellaneous.findViewById(R.id.viewColor2).performClick();
                     break;
-                case "#FF4842":
+                case "#e65e5e":
                     layoutMiscellaneous.findViewById(R.id.viewColor3).performClick();
                     break;
-                case "#3A52FC":
+                case "#58a7db":
                     layoutMiscellaneous.findViewById(R.id.viewColor4).performClick();
                     break;
                 case "#000000":
