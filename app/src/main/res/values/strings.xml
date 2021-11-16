@@ -4,7 +4,7 @@
     <string name="search_notes">Recherche</string>
     <string name="note_title">Titre</string>
     <string name="note_subtitle">Sous-titre</string>
-    <string name="textDateTime">DateTime</string>
+    <string name="textDateTime">date/heure</string>
     <string name="type_note_here">Taper le texte ici...</string>
     <string name="miscellaneous">Options</string>
     <string name="pick_color">selection de la couleur :</string>
