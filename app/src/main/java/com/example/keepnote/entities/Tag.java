@@ -17,6 +17,7 @@ public class Tag implements Serializable {
     private String title;
 
     // reference à l'entité parent
+    @ColumnInfo(name="noteCreatorId")
     public int noteCreatorId;
 
     public int getId() {
@@ -33,6 +34,14 @@ public class Tag implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getNoteCreatorId() {
+        return noteCreatorId;
+    }
+
+    public void setNoteCreatorId(int noteCreatorId) {
+        this.noteCreatorId = noteCreatorId;
     }
 
     @NonNull

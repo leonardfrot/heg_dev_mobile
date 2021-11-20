@@ -10,18 +10,17 @@ import com.example.keepnote.entities.Note;
 import com.example.keepnote.entities.Tag;
 
 import java.util.List;
-import java.util.Map;
-
 @Dao
-public interface NoteDAO {
+public interface TagDAO {
 
-    @Query("SELECT * FROM notes ORDER BY idNotes DESC")
-    List<Note> getAllNotes();
+    @Query("SELECT * FROM tag ORDER BY id DESC")
+    List<Tag> getAllTags();
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertNote(Note note);
+    void insertTag(Tag tag);
 
     @Delete
-    void deleteNote(Note note);
+    void deleteNote(Tag tag);
+
 }
