@@ -160,9 +160,7 @@
                 android:id="@+id/inputNote"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:layout_marginTop="@dimen/_15sdp"
-                android:layout_marginEnd="@dimen/_12sdp"
+                android:layout_marginTop="19dp"
                 android:layout_marginBottom="@dimen/_15sdp"
                 android:background="@null"
                 android:gravity="top"
@@ -176,7 +174,7 @@
                 android:textSize="@dimen/_13sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/layoutWebURL"
-                />
+                tools:layout_editor_absoluteX="16dp" />
 
             <EditText
                 android:id="@+id/date_time_imput"
@@ -190,6 +188,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/inputNote"
                 />
 
+
             <co.lujun.androidtagview.TagContainerLayout
                 android:id="@+id/tagContainerLayout"
                 android:layout_width="match_parent"
@@ -202,7 +201,6 @@
                 app:tag_clickable="true"
                 app:tag_theme="pure_teal"
                 app:vertical_interval="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/date_time_imput"
                 />
 
