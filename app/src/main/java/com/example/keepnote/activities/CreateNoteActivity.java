@@ -57,6 +57,7 @@ import java.util.List;
 import java.util.Locale;
 
 import co.lujun.androidtagview.TagContainerLayout;
+import co.lujun.androidtagview.TagView;
 
 public class CreateNoteActivity extends AppCompatActivity {
 
@@ -67,6 +68,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     private TextView textWebURL;
     private LinearLayout layoutWebURL;
     private EditText date_time_in;
+    private EditText add_tag;
 
     private String selectedNoteColor;
     private String selectedImagePath;
@@ -104,16 +106,9 @@ public class CreateNoteActivity extends AppCompatActivity {
         imageNote = findViewById(R.id.imageNote);
         textWebURL = findViewById(R.id.textWebUrl);
         layoutWebURL = findViewById(R.id.layoutWebURL);
-
+        add_tag = findViewById(R.id.add_tag);
 
         mTagContainerLayout = (TagContainerLayout) findViewById(R.id.tagContainerLayout);
-        mTagContainerLayout.addTag("test");
-
-
-
-
-
-
 
         date_time_in = findViewById(R.id.date_time_imput);
         date_time_in.setInputType(InputType.TYPE_NULL);
@@ -183,6 +178,30 @@ public class CreateNoteActivity extends AppCompatActivity {
 
             }
         });
+
+        mTagContainerLayout.setOnTagClickListener(new TagView.OnTagClickListener() {
+            @Override
+            public void onTagClick(int position, String text) {
+
+            }
+
+            @Override
+            public void onTagLongClick(int position, String text) {
+                mTagContainerLayout.removeTag(position);
+
+            }
+
+            @Override
+            public void onSelectedTagDrag(int position, String text) {
+
+            }
+
+            @Override
+            public void onTagCrossClick(int position) {
+
+            }
+        });
+
         initMiscellaneous();
         setBackground();
     }
@@ -647,10 +666,12 @@ public class CreateNoteActivity extends AppCompatActivity {
         }
 
 
-
-
-
+    public void addTag(View view) {
+        String tagToAdd = add_tag.getText().toString();
+        mTagContainerLayout.addTag(tagToAdd);
+        add_tag.setText("");
     }
+}
 
 
 

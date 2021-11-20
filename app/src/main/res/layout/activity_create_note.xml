@@ -184,10 +184,32 @@
                 android:textColor="@color/colorIcon"
                 android:textSize="@dimen/_10sdp"
                 android:textColorHint="@color/colorTextHint"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/inputNote"
                 />
 
+            <EditText
+                android:id="@+id/add_tag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="add tag here"
+                android:textColor="@color/colorIcon"
+                android:textSize="@dimen/_14sdp"
+                android:textColorHint="@color/colorTextHint"
+                app:layout_constraintTop_toBottomOf="@+id/date_time_imput"
+                />
+
+            <Button
+                android:id="@+id/button_add_tag"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_20sdp"
+                app:layout_constraintTop_toBottomOf="@+id/add_tag"
+                android:background="@color/colorPrimaryDark"
+                android:textSize="@dimen/_10sdp"
+                android:text="@string/add_tag"
+                android:textColor="@color/colorWhite"
+                android:onClick="addTag"
+
+                tools:ignore="MissingConstraints" />
 
             <co.lujun.androidtagview.TagContainerLayout
                 android:id="@+id/tagContainerLayout"
@@ -201,7 +223,7 @@
                 app:tag_clickable="true"
                 app:tag_theme="pure_teal"
                 app:vertical_interval="10dp"
-                app:layout_constraintTop_toBottomOf="@+id/date_time_imput"
+                app:layout_constraintTop_toBottomOf="@+id/button_add_tag"
                 />
 
 
