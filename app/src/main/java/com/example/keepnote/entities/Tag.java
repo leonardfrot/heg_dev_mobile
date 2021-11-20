@@ -16,6 +16,9 @@ public class Tag implements Serializable {
     @ColumnInfo(name="title")
     private String title;
 
+    // reference à l'entité parent
+    public int noteCreatorId;
+
     public int getId() {
         return id;
     }
