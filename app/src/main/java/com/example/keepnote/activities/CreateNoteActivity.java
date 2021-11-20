@@ -101,7 +101,8 @@ public class CreateNoteActivity extends AppCompatActivity {
         layoutWebURL = findViewById(R.id.layoutWebURL);
 
         nacho = findViewById(R.id.et_tag);
-        nacho.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
+        nacho.addChipTerminator('#', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
+
 
         date_time_in = findViewById(R.id.date_time_imput);
         date_time_in.setInputType(InputType.TYPE_NULL);

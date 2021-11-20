@@ -1,6 +1,7 @@
 package com.example.keepnote.entities;
 
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -30,4 +31,9 @@ public class Tag implements Serializable {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return this.title;}
 }
