@@ -43,6 +43,7 @@ import com.example.keepnote.R;
 import com.example.keepnote.broadcast.AlarmBroadCast;
 import com.example.keepnote.database.NotesDatabase;
 import com.example.keepnote.entities.Note;
+import com.example.keepnote.entities.Tag;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.hootsuite.nachos.NachoTextView;
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
@@ -52,7 +53,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+
+import co.lujun.androidtagview.TagContainerLayout;
 
 public class CreateNoteActivity extends AppCompatActivity {
 
@@ -67,8 +71,9 @@ public class CreateNoteActivity extends AppCompatActivity {
     private String selectedNoteColor;
     private String selectedImagePath;
 
-    //librairie pour le tag
-    private NachoTextView nacho;
+    // la librairie pour les tags
+    private TagContainerLayout mTagContainerLayout;
+    private List<String> tagNameList;
 
     private static final int REQUEST_CODE_STORAGE_PERMISSION = 1;
     private static final int REQUEST_CODE_SELECT_IMAGE = 2;
@@ -100,8 +105,14 @@ public class CreateNoteActivity extends AppCompatActivity {
         textWebURL = findViewById(R.id.textWebUrl);
         layoutWebURL = findViewById(R.id.layoutWebURL);
 
-        nacho = findViewById(R.id.et_tag);
-        nacho.addChipTerminator('#', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
+
+        mTagContainerLayout = (TagContainerLayout) findViewById(R.id.tagContainerLayout);
+        mTagContainerLayout.addTag("test");
+
+
+
+
+
 
 
         date_time_in = findViewById(R.id.date_time_imput);
