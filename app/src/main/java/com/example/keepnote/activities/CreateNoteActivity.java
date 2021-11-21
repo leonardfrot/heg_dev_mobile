@@ -137,7 +137,6 @@ public class CreateNoteActivity extends AppCompatActivity {
         // remplit la note quand l'intent passé depuis le main activity est view ou update
         if(getIntent().getBooleanExtra("isViewOrUpdate", false)){
             alreadyAvailableNote = (Note) getIntent().getSerializableExtra("note");
-            System.out.println(alreadyAvailableNote.getIdNotes());
             setViewOrUpdateNote();
         }
 
@@ -239,6 +238,30 @@ public class CreateNoteActivity extends AppCompatActivity {
 
     // Cette méthode permet de remettre dans les champs texte, les données des notes lors de vue ou de modification.
     private void setViewOrUpdateNote(){
+
+        @SuppressLint("StaticFieldLeak")
+        class GetTagTask extends AsyncTask<Void, Void, List<Tag>> {
+            @Override
+            protected List<Tag> doInBackground(Void... voids) {
+                return NotesDatabase.getDatabase(getApplicationContext()).tagDAO().getAllTags();
+            }
+
+            // en fonction du code passé en paramètre il va réagir différemment
+            @Override
+            protected void onPostExecute(List<Tag> tags) {
+                super.onPostExecute(tags);
+                System.out.println(tags);
+                for(Tag t : tags){
+                    if(t.getNoteTitle().equals(alreadyAvailableNote.getTitle())){
+                        mTagContainerLayout.addTag(t.getTitle());
+                    }
+                }
+
+            }
+        }
+        new GetTagTask().execute();
+
+
         inputNoteTitle.setText(alreadyAvailableNote.getTitle());
         inputNoteSubtitle.setText(alreadyAvailableNote.getSubtitle());
         inputNoteText.setText(alreadyAvailableNote.getNoteText());
@@ -257,24 +280,11 @@ public class CreateNoteActivity extends AppCompatActivity {
             layoutWebURL.setVisibility(View.VISIBLE);
         }
 
-        @SuppressLint("StaticFieldLeak")
-        class LoadTagTask extends AsyncTask<Void, Void, List<Tag>>{
-            @Override
-            protected List<Tag> doInBackground(Void... voids){
-                return NotesDatabase.getDatabase(getApplicationContext()).tagDAO().getAllTags();
-            }
 
-            @Override
-            protected void onPostExecute(List<Tag> tags){
-                tagList.addAll(tags);
-                super.onPostExecute(tags);
-            }
-        }
-        new LoadTagTask().execute();
 
-        for (Tag tag : tagList){
-            mTagContainerLayout.addTag(tag.getTitle());
-        }
+
+
+
 
     }
 
@@ -320,9 +330,20 @@ public class CreateNoteActivity extends AppCompatActivity {
             note.setWebLink(textWebURL.getText().toString());
         }
 
-        if(alreadyAvailableNote != null){
-            note.setIdNotes(alreadyAvailableNote.getIdNotes());
+        tagNameList = new ArrayList<>();
+
+        tagNameList = mTagContainerLayout.getTags();
+
+        tagList = new ArrayList<>();
+
+        for (String s : tagNameList){
+            Tag tag = new Tag();
+            tag.setTitle(s);
+            tag.setNoteTitle(note.getTitle());
+            tagList.add(tag);
         }
+
+
 
         @SuppressLint("StaticFieldLeak")
         class SaveNoteTask extends AsyncTask<Void, Void, Void>{
@@ -330,6 +351,8 @@ public class CreateNoteActivity extends AppCompatActivity {
             @Override
             protected Void doInBackground(Void... voids){
                 NotesDatabase.getDatabase(getApplicationContext()).noteDao().insertNote(note);
+                NotesDatabase.getDatabase(getApplicationContext()).noteDao().insertAllTags(tagList);
+
                 return null;
             }
 
@@ -344,51 +367,12 @@ public class CreateNoteActivity extends AppCompatActivity {
 
         new SaveNoteTask().execute();
 
-        saveTag(note);
+
 
         String message = "la date de la note " + title + "est dépassé ";
         setAlarm(message, timelimit, note);
 
         System.out.println(note);
-
-    }
-
-    private void saveTag(Note note) {
-
-        tagNameList = new ArrayList<>();
-
-        tagNameList = mTagContainerLayout.getTags();
-
-        tagList = new ArrayList<>();
-
-        for (String s : tagNameList){
-            Tag tag = new Tag();
-            tag.setTitle(s);
-            tag.setNoteCreatorId(note.getTitle());
-            tagList.add(tag);
-        }
-
-
-        @SuppressLint("StaticFieldLeak")
-        class SaveTagTask extends AsyncTask<Void, Void, Void>{
-
-            @Override
-            protected Void doInBackground(Void... voids){
-
-                NotesDatabase.getDatabase(getApplicationContext()).tagDAO().insertAll(tagList);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid){
-                super.onPostExecute(aVoid);
-                Intent intent = new Intent();
-                setResult(RESULT_OK, intent);
-                finish();
-            }
-        }
-
-        new SaveTagTask().execute();
 
     }
 

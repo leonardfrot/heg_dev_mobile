@@ -11,23 +11,14 @@ import java.io.Serializable;
 @Entity(tableName = "tag")
 public class Tag implements Serializable {
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-
+    @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name="title")
+    @NonNull
     private String title;
 
     // reference à l'entité parent
-    @ColumnInfo(name="noteCreatorId")
-    public String noteCreatorId;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    @ColumnInfo(name="noteTitle")
+    public String noteTitle;
 
     public String getTitle() {
         return title;
@@ -37,16 +28,16 @@ public class Tag implements Serializable {
         this.title = title;
     }
 
-    public String getNoteCreatorId() {
-        return noteCreatorId;
+    public String getNoteTitle() {
+        return noteTitle;
     }
 
-    public void setNoteCreatorId(String noteCreatorId) {
-        this.noteCreatorId = noteCreatorId;
+    public void setNoteTitle(String noteTitle) {
+        this.noteTitle = noteTitle;
     }
 
     @NonNull
     @Override
     public String toString() {
-        return this.title;}
+        return this.noteTitle + this.title;}
 }

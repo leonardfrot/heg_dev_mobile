@@ -14,12 +14,7 @@ import java.util.Map;
 @Dao
 public interface NoteWithTagsDAO {
 
-    // la méthode de sélection pour toutes les notes
-    @Transaction
-    @Query("SELECT * FROM notes "+
-            "JOIN tag ON idNotes = noteCreatorId"
-    )
-    public List<NoteWithTags> getNoteWithTags();
+
 
 
 

@@ -10,7 +10,7 @@ public class NoteWithTags {
 
     @Relation(
             parentColumn = "title",
-            entityColumn = "noteCreatorId"
+            entityColumn = "noteTitle"
     )
 
     public List<Tag> tags;

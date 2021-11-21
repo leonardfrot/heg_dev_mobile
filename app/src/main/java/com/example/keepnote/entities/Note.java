@@ -14,10 +14,8 @@ import java.time.LocalDate;
 @Entity(tableName = "notes")
 // il implémente Seriablizable pour pouvoir passer l'objet note avec les intents
 public class Note implements Serializable {
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name="idNotes")
-    private int idNotes;
-
+    @PrimaryKey(autoGenerate = false)
+    @NonNull
     @ColumnInfo(name="title")
     private String title;
 
@@ -41,15 +39,6 @@ public class Note implements Serializable {
 
     @ColumnInfo(name="alert_date")
     private String alertDate;
-
-
-    public int getIdNotes() {
-        return idNotes;
-    }
-
-    public void setIdNotes(int idNotes) {
-        this.idNotes = idNotes;
-    }
 
     public String getTitle() {
         return title;
