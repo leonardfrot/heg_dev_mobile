@@ -9,7 +9,7 @@ public class NoteWithTags {
     public Note note;
 
     @Relation(
-            parentColumn = "idNotes",
+            parentColumn = "title",
             entityColumn = "noteCreatorId"
     )
 

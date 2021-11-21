@@ -17,7 +17,7 @@ public interface TagDAO {
     List<Tag> getAllTags();
 
     @Query("SELECT * FROM tag WHERE noteCreatorId == :id")
-    List<Tag> getAllTagById(int id);
+    List<Tag> getAllTagById(String id);
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

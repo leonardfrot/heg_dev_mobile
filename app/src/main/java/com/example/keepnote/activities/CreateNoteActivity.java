@@ -52,6 +52,7 @@ import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -136,6 +137,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         // remplit la note quand l'intent passé depuis le main activity est view ou update
         if(getIntent().getBooleanExtra("isViewOrUpdate", false)){
             alreadyAvailableNote = (Note) getIntent().getSerializableExtra("note");
+            System.out.println(alreadyAvailableNote.getIdNotes());
             setViewOrUpdateNote();
         }
 
@@ -257,21 +259,22 @@ public class CreateNoteActivity extends AppCompatActivity {
 
         @SuppressLint("StaticFieldLeak")
         class LoadTagTask extends AsyncTask<Void, Void, List<Tag>>{
-
             @Override
             protected List<Tag> doInBackground(Void... voids){
-                NotesDatabase.getDatabase(getApplicationContext()).tagDAO().getAllTagById(alreadyAvailableNote.getIdNotes());
-                return null;
+                return NotesDatabase.getDatabase(getApplicationContext()).tagDAO().getAllTags();
             }
 
             @Override
             protected void onPostExecute(List<Tag> tags){
+                tagList.addAll(tags);
                 super.onPostExecute(tags);
-
             }
         }
-
         new LoadTagTask().execute();
+
+        for (Tag tag : tagList){
+            mTagContainerLayout.addTag(tag.getTitle());
+        }
 
     }
 
@@ -321,18 +324,6 @@ public class CreateNoteActivity extends AppCompatActivity {
             note.setIdNotes(alreadyAvailableNote.getIdNotes());
         }
 
-        // la partie pour faire persister les tags
-        tagNameList = mTagContainerLayout.getTags();
-        for(String s: tagNameList){
-            System.out.println(s);
-        }
-
-
-
-        // création des tag en mettant l'id de la note actuelle.
-
-
-
         @SuppressLint("StaticFieldLeak")
         class SaveNoteTask extends AsyncTask<Void, Void, Void>{
 
@@ -353,11 +344,51 @@ public class CreateNoteActivity extends AppCompatActivity {
 
         new SaveNoteTask().execute();
 
-        
+        saveTag(note);
+
         String message = "la date de la note " + title + "est dépassé ";
         setAlarm(message, timelimit, note);
 
         System.out.println(note);
+
+    }
+
+    private void saveTag(Note note) {
+
+        tagNameList = new ArrayList<>();
+
+        tagNameList = mTagContainerLayout.getTags();
+
+        tagList = new ArrayList<>();
+
+        for (String s : tagNameList){
+            Tag tag = new Tag();
+            tag.setTitle(s);
+            tag.setNoteCreatorId(note.getTitle());
+            tagList.add(tag);
+        }
+
+
+        @SuppressLint("StaticFieldLeak")
+        class SaveTagTask extends AsyncTask<Void, Void, Void>{
+
+            @Override
+            protected Void doInBackground(Void... voids){
+
+                NotesDatabase.getDatabase(getApplicationContext()).tagDAO().insertAll(tagList);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid){
+                super.onPostExecute(aVoid);
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        }
+
+        new SaveTagTask().execute();
 
     }
 
@@ -704,6 +735,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         String tagToAdd = add_tag.getText().toString();
         mTagContainerLayout.addTag(tagToAdd);
         add_tag.setText("");
+        System.out.println(mTagContainerLayout.getTags());
     }
 }
 
