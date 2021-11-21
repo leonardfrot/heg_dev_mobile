@@ -10,6 +10,7 @@ import java.io.Serializable;
 
 @Entity(tableName = "tag")
 public class Tag implements Serializable {
+
     @PrimaryKey(autoGenerate = true)
     private int id;
 

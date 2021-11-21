@@ -41,6 +41,7 @@ import android.widget.Toast;
 
 import com.example.keepnote.R;
 import com.example.keepnote.broadcast.AlarmBroadCast;
+import com.example.keepnote.dao.TagDAO;
 import com.example.keepnote.database.NotesDatabase;
 import com.example.keepnote.entities.Note;
 import com.example.keepnote.entities.Tag;
@@ -76,6 +77,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     // la librairie pour les tags
     private TagContainerLayout mTagContainerLayout;
     private List<String> tagNameList;
+    private List<Tag> tagList;
 
     private static final int REQUEST_CODE_STORAGE_PERMISSION = 1;
     private static final int REQUEST_CODE_SELECT_IMAGE = 2;
@@ -84,6 +86,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     private AlertDialog dialogDeleteNote;
 
     private Note alreadyAvailableNote;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -251,6 +254,25 @@ public class CreateNoteActivity extends AppCompatActivity {
             textWebURL.setText(alreadyAvailableNote.getWebLink());
             layoutWebURL.setVisibility(View.VISIBLE);
         }
+
+        @SuppressLint("StaticFieldLeak")
+        class LoadTagTask extends AsyncTask<Void, Void, List<Tag>>{
+
+            @Override
+            protected List<Tag> doInBackground(Void... voids){
+                NotesDatabase.getDatabase(getApplicationContext()).tagDAO().getAllTagById(alreadyAvailableNote.getIdNotes());
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(List<Tag> tags){
+                super.onPostExecute(tags);
+
+            }
+        }
+
+        new LoadTagTask().execute();
+
     }
 
     private void saveNote() {
@@ -298,6 +320,18 @@ public class CreateNoteActivity extends AppCompatActivity {
         if(alreadyAvailableNote != null){
             note.setIdNotes(alreadyAvailableNote.getIdNotes());
         }
+
+        // la partie pour faire persister les tags
+        tagNameList = mTagContainerLayout.getTags();
+        for(String s: tagNameList){
+            System.out.println(s);
+        }
+
+
+
+        // création des tag en mettant l'id de la note actuelle.
+
+
 
         @SuppressLint("StaticFieldLeak")
         class SaveNoteTask extends AsyncTask<Void, Void, Void>{
