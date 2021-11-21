@@ -11,7 +11,9 @@ import java.io.Serializable;
 @Entity(tableName = "tag")
 public class Tag implements Serializable {
 
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
     @ColumnInfo(name="title")
     @NonNull
     private String title;
@@ -19,6 +21,14 @@ public class Tag implements Serializable {
     // reference à l'entité parent
     @ColumnInfo(name="noteTitle")
     public String noteTitle;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;

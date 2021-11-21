@@ -17,7 +17,7 @@ import java.util.Map;
 @Dao
 public interface NoteDAO {
 
-    @Query("SELECT * FROM notes ORDER BY title")
+    @Query("SELECT * FROM notes ORDER BY id DESC")
     List<Note> getAllNotes();
 
 
