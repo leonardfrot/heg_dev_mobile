@@ -14,7 +14,6 @@ import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -41,16 +40,21 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.keepnote.R;
+import com.example.keepnote.adapters.NotesAdapter;
 import com.example.keepnote.database.AlarmBroadCast;
 import com.example.keepnote.database.NotesDatabase;
+import com.example.keepnote.database.NotesTrashDatabase;
 import com.example.keepnote.entities.Note;
+import com.example.keepnote.entities.NoteTrash;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class CreateNoteActivity extends AppCompatActivity {
@@ -62,7 +66,6 @@ public class CreateNoteActivity extends AppCompatActivity {
     private TextView textWebURL;
     private LinearLayout layoutWebURL;
     private EditText date_time_in;
-    private boolean delete_date;
 
     private String selectedNoteColor;
     private String selectedImagePath;
@@ -74,6 +77,9 @@ public class CreateNoteActivity extends AppCompatActivity {
     private AlertDialog dialogDeleteNote;
 
     private Note alreadyAvailableNote;
+
+    private List<Note> noteList;
+    private NotesAdapter notesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,8 +110,6 @@ public class CreateNoteActivity extends AppCompatActivity {
                 new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm a", Locale.getDefault())
                         .format(new Date())
         );
-
-        delete_date = false;
 
         ImageView imageSave = findViewById(R.id.imageSave);
         imageSave.setOnClickListener(new View.OnClickListener() {
@@ -244,7 +248,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         note.setDateTime(textDateTime.getText().toString());
         note.setColor(selectedNoteColor);
         note.setImagePath(selectedImagePath);
-        note.setDeleteDate(false);
+        //note.setDeleteDate(false);
 
         //on a besoion de comparer 2 dates:
 
@@ -487,16 +491,37 @@ public class CreateNoteActivity extends AppCompatActivity {
 
                         @Override
                         protected Void doInBackground(Void... voids) {
-                            alreadyAvailableNote.setDeleteDate(true);
+                            NoteTrash noteTrash = new NoteTrash();
+                            noteTrash.setId(alreadyAvailableNote.getId());
+                            noteTrash.setTitle(alreadyAvailableNote.getTitle());
+                            noteTrash.setDateTime(alreadyAvailableNote.getDateTime());
+                            noteTrash.setSubtitle(alreadyAvailableNote.getSubtitle());
+                            noteTrash.setNoteText(alreadyAvailableNote.getNoteText());
+                            noteTrash.setImagePath(alreadyAvailableNote.getImagePath());
+                            noteTrash.setColor(alreadyAvailableNote.getColor());
+                            noteTrash.setWebLink(alreadyAvailableNote.getWebLink());
+                            noteTrash.setAlertDate(alreadyAvailableNote.getAlertDate());
+
+                            NotesTrashDatabase.getDatabase(getApplicationContext()).noteTrashDao()
+                                    .insertNote(noteTrash);
+                            NotesDatabase.getDatabase(getApplicationContext()).noteDao()
+                                    .deleteNote(alreadyAvailableNote);
                             return null;
                         }
 
                         @Override
                         protected void onPostExecute(Void unused) {
                             super.onPostExecute(unused);
-                            Intent intent = new Intent();
-                            intent.putExtra("isNoteDeleted", true);
-                            setResult(RESULT_OK, intent);
+                            noteList = new ArrayList<>();
+                            noteList.addAll(NotesDatabase.getDatabase(getApplicationContext()).noteDao().getAllNotes());
+                            int position = -1;
+                            for (Note note : noteList){
+                                if (note.equals(alreadyAvailableNote)){
+                                    position++;
+                                }
+                            }
+                            noteList.remove(alreadyAvailableNote);
+                            notesAdapter.notifyItemRemoved(position);
                             finish();
                         }
                     }
@@ -628,51 +653,3 @@ public class CreateNoteActivity extends AppCompatActivity {
         dialogAddURL.show();
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

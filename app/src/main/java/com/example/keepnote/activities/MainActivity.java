@@ -2,7 +2,6 @@ package com.example.keepnote.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -51,9 +50,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
 
     private RecyclerView notesRecyclerView;
     private List<Note> noteList;
-    private List<Note> noteNotTrashList;
     private NotesAdapter notesAdapter;
-    private NotesDatabase notesDatabase;
 
     private int noteClickedPosition = -1;
 
@@ -195,7 +192,9 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
     private void getNotes(final int requestCode, final boolean isNoteDeleted) {
 
         noteList = new ArrayList<>();
-        noteNotTrashList = new ArrayList<>();
+
+        notesAdapter = new NotesAdapter(noteList, this);
+        notesRecyclerView.setAdapter(notesAdapter);
 
         @SuppressLint("StaticFieldLeak")
         class GetNotesTask extends AsyncTask<Void, Void, List<Note>> {
@@ -210,32 +209,20 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                 super.onPostExecute(notes);
                 if(requestCode == REQUEST_CODE_SHOW_NOTES){
                     noteList.addAll(notes);
-                    for (Note note : noteList) {
-                        if (!note.getDeleteDate()) {
-                            noteNotTrashList.add(note);
-                        }
-                    }
                     notesAdapter.notifyDataSetChanged();
                 }else if(requestCode == REQUEST_CODE_ADD_NOTE){
                     noteList.add(0, notes.get(0));
                     notesAdapter.notifyItemInserted(0);
                     notesRecyclerView.smoothScrollToPosition(0);
                 }else if (requestCode == REQUEST_CODE_UPDATE_NOTE){
-                    noteList.remove(noteClickedPosition);
-                    if(isNoteDeleted){
-                        notesAdapter.notifyItemRemoved(noteClickedPosition);
-                    }else{
+                        noteList.addAll(notes);
+                        noteList.remove(noteClickedPosition);
                         noteList.add(noteClickedPosition, notes.get(noteClickedPosition));
                         notesAdapter.notifyItemInserted(noteClickedPosition);
-                    }
                 }
-
             }
         }
         new GetNotesTask().execute();
-
-        notesAdapter = new NotesAdapter(noteNotTrashList, this);
-        notesRecyclerView.setAdapter(notesAdapter);
     }
 
     @Override

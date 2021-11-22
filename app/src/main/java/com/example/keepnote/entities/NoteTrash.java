@@ -8,8 +8,8 @@ import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
-@Entity(tableName = "notes")
-public class Note implements Serializable {
+@Entity(tableName = "notesTrash")
+public class NoteTrash implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
@@ -126,4 +126,6 @@ public class Note implements Serializable {
     public String toString() {
         return title + " : " + dateTime;
     }
+
+
 }

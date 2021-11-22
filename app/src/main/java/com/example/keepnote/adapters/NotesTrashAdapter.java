@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,35 +14,30 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.keepnote.R;
-import com.example.keepnote.entities.Note;
-import com.example.keepnote.listeners.NotesListener;
+import com.example.keepnote.entities.NoteTrash;
+import com.example.keepnote.listeners.NotesTrashListener;
 import com.makeramen.roundedimageview.RoundedImageView;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
-// Cette classe permet d'afficher dans la page principale, les notes avec les infos nécessaires.
-public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder>{
+public class NotesTrashAdapter extends RecyclerView.Adapter<NotesTrashAdapter.NoteTrashViewHolder>{
 
-    private List<Note> notes;
-    private NotesListener notesListener;
-    private Timer timer;
-    private List<Note> notesSource;
+    private List<NoteTrash> notesTrash;
+    private NotesTrashListener notesTrashListener;
+    private List<NoteTrash> notesTrashSource;
 
 
-    public NotesAdapter(List<Note> notes, NotesListener notesListener) {
-        this.notes = notes;
-        this.notesListener = notesListener;
-        notesSource = notes;
+    public NotesTrashAdapter(List<NoteTrash> notes, NotesTrashListener notesTrashListener) {
+        this.notesTrash = notes;
+        this.notesTrashListener = notesTrashListener;
+        notesTrashSource = notes;
     }
 
     // il permet de récupérer item container note
     @NonNull
     @Override
-    public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new NoteViewHolder(
+    public NotesTrashAdapter.NoteTrashViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new NotesTrashAdapter.NoteTrashViewHolder(
                 LayoutInflater.from(parent.getContext()).inflate(R.layout.item_container_note, parent, false)
         );
     }
@@ -52,19 +45,19 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
     // il permet de cliquer sur les images
     @Override
-    public void onBindViewHolder(@NonNull NoteViewHolder holder, @SuppressLint("RecyclerView") final int position) {
-        holder.setNote(notes.get(position));
+    public void onBindViewHolder(@NonNull NoteTrashViewHolder holder, @SuppressLint("RecyclerView") final int position) {
+        holder.setNoteTrash(notesTrash.get(position));
         holder.layoutNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                notesListener.onNoteClicked(notes.get(position), position);
+                notesTrashListener.onNoteTrashClicked(notesTrash.get(position), position);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return notes.size();
+        return notesTrash.size();
     }
 
     @Override
@@ -72,13 +65,13 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         return position;
     }
 
-    static class NoteViewHolder extends RecyclerView.ViewHolder{
+    static class NoteTrashViewHolder extends RecyclerView.ViewHolder{
 
         TextView textTitle, textSubtitle, textDateTime, alertDateTime, deleteDateTime;
         LinearLayout layoutNote;
         RoundedImageView imageNote;
 
-        NoteViewHolder(@NonNull View itemView) {
+        NoteTrashViewHolder(@NonNull View itemView) {
             super(itemView);
             textTitle = itemView.findViewById(R.id.textTitle);
             textSubtitle = itemView.findViewById(R.id.textSubtitle);
@@ -90,9 +83,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
         }
 
-
         // cette méthdoe permet d'afficher les informations sauvegardés dans les note, notamment l'image
-        void setNote(Note note){
+        void setNoteTrash(NoteTrash note){
             textTitle.setText(note.getTitle());
             if(note.getSubtitle().trim().isEmpty()){
                 textSubtitle.setVisibility(View.GONE);
@@ -115,40 +107,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             }else{
                 imageNote.setVisibility(View.GONE);
             }
-        }
-    }
-
-    public void searchNotes (final String searchKeyword) {
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (searchKeyword.trim().isEmpty()) {
-                    notes = notesSource;
-                } else {
-                    ArrayList<Note> temp = new ArrayList<>();
-                    for (Note note: notesSource) {
-                        if (note.getTitle().toLowerCase(). contains (searchKeyword.toLowerCase())
-                                || ( note.getSubtitle().toLowerCase().contains (searchKeyword.toLowerCase())
-                                || note.getNoteText().toLowerCase(). contains (searchKeyword.toLowerCase()))){
-                            temp.add(note);
-                        }
-                        notes = temp;
-                    }
-                }
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        notifyDataSetChanged();
-                    }
-                });
-            }
-        }, 500);
-    }
-
-    public void cancelTimer () {
-        if (timer != null) {
-            timer.cancel();
         }
     }
 }
