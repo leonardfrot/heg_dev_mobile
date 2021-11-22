@@ -7,6 +7,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity(tableName = "tag")
 public class Tag implements Serializable {
@@ -50,4 +51,17 @@ public class Tag implements Serializable {
     @Override
     public String toString() {
         return this.noteTitle + this.title;}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tag tag = (Tag) o;
+        return title.equals(tag.title) && Objects.equals(noteTitle, tag.noteTitle);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, noteTitle);
+    }
 }

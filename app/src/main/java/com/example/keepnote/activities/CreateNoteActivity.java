@@ -87,6 +87,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     private AlertDialog dialogDeleteNote;
 
     private Note alreadyAvailableNote;
+    private List<Tag> alreadyAvailableTag;
 
 
     @Override
@@ -236,6 +237,8 @@ public class CreateNoteActivity extends AppCompatActivity {
                 calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
+
+
     // Cette méthode permet de remettre dans les champs texte, les données des notes lors de vue ou de modification.
     private void setViewOrUpdateNote(){
 
@@ -251,9 +254,12 @@ public class CreateNoteActivity extends AppCompatActivity {
             protected void onPostExecute(List<Tag> tags) {
                 super.onPostExecute(tags);
                 System.out.println(tags);
+                alreadyAvailableTag = new ArrayList<>();
                 for(Tag t : tags){
                     if(t.getNoteTitle().equals(alreadyAvailableNote.getTitle())){
                         mTagContainerLayout.addTag(t.getTitle());
+                        // récupération des tag existant au début pour ne pas les réinsérer plus tard
+                        alreadyAvailableTag.add(t);
                     }
                 }
 
@@ -279,13 +285,6 @@ public class CreateNoteActivity extends AppCompatActivity {
             textWebURL.setText(alreadyAvailableNote.getWebLink());
             layoutWebURL.setVisibility(View.VISIBLE);
         }
-
-
-
-
-
-
-
     }
 
     private void saveNote() {
@@ -309,6 +308,11 @@ public class CreateNoteActivity extends AppCompatActivity {
         note.setDateTime(textDateTime.getText().toString());
         note.setColor(selectedNoteColor);
         note.setImagePath(selectedImagePath);
+
+        // comme en conflit, on a mit replace, si c'est le meme id, ca va le remplacer.
+        if(alreadyAvailableNote != null){
+            note.setId(alreadyAvailableNote.getId());
+        }
 
         //on a besoion de comparer 2 dates:
 
@@ -343,8 +347,9 @@ public class CreateNoteActivity extends AppCompatActivity {
             tagList.add(tag);
         }
 
-
-
+        if (alreadyAvailableTag!=null){
+            tagList.removeAll(alreadyAvailableTag);
+        }
         @SuppressLint("StaticFieldLeak")
         class SaveNoteTask extends AsyncTask<Void, Void, Void>{
 
@@ -366,8 +371,6 @@ public class CreateNoteActivity extends AppCompatActivity {
         }
 
         new SaveNoteTask().execute();
-
-
 
         String message = "la date de la note " + title + "est dépassé ";
         setAlarm(message, timelimit, note);
