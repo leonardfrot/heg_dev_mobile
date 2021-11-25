@@ -8,29 +8,25 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 
 import com.example.keepnote.entities.Note;
-import com.example.keepnote.entities.NoteWithTags;
 import com.example.keepnote.entities.Tag;
 
 import java.util.List;
-import java.util.Map;
-
 @Dao
-public interface NoteDAO {
+public interface TagDAO {
 
-    @Query("SELECT * FROM notes ORDER BY id DESC")
-    List<Note> getAllNotes();
+    @Query("SELECT * FROM tag")
+    List<Tag> getAllTags();
 
+    @Query("SELECT * FROM tag WHERE noteTitle = :title")
+    List<Tag> getAllTagOfNotes(String title);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertNote(Note note);
+    void insertTag(Tag tag);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAllTags(List<Tag> tags);
-
-    @Transaction
-    @Query("SELECT * FROM notes WHERE title = :title")
-    List<NoteWithTags> getNotesWithTags(String title);
+    void insertAll(List<Tag> tags);
 
     @Delete
-    void deleteNote(Note note);
+    void deleteNote(Tag tag);
+
 }

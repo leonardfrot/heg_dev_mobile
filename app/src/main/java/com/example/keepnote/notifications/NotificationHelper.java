@@ -4,15 +4,20 @@ import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 
 import com.example.keepnote.R;
+import com.example.keepnote.activities.CreateNoteActivity;
+import com.example.keepnote.entities.Note;
 
 public class NotificationHelper extends ContextWrapper {
 
@@ -20,6 +25,8 @@ public class NotificationHelper extends ContextWrapper {
     public static final String channelName = "Channel";
 
     private NotificationManager manager;
+
+
 
     public NotificationHelper(Context base) {
         super(base);
@@ -49,12 +56,25 @@ public class NotificationHelper extends ContextWrapper {
         return manager;
     }
 
-    public NotificationCompat.Builder getChannel1Notification(String title, String message){
+    // construction de la notification de la chaine 1, ici nous n'avons qu'une seule chaine
+    public NotificationCompat.Builder getChannel1Notification(String title, String message, Note note){
+
+        // c'est la qu'on décide quelle activité on doit ourrir, on remet la note en paramètre qui arrive jusqu'ici depuis saveNote au début
+        Intent intent = new Intent(this, CreateNoteActivity.class);
+        intent.putExtra("isViewOrUpdate", true);
+        intent.putExtra("note", note);
+
+        System.out.println(note);
+
+        PendingIntent pd = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         return new NotificationCompat.Builder(getApplicationContext(), channelID)
                 .setContentTitle(title)
                 .setContentText(message)
-                .setSmallIcon(R.drawable.ic_image);
-    }
+                .setSmallIcon(R.drawable.ic_image)
+                .setAutoCancel(true)
+                .setContentIntent(pd);
 
+    }
 
 }

@@ -2,9 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.keepnote">
+
+
     <!-- on en a besoin pour communiquer avec la caméra pour ajouter une image -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- on en a besoin pour l'alarme -->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <!-- on en a besoin pour l'alarme -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:allowBackup="true"
@@ -15,19 +18,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Notes"
         tools:targetApi="q">
-        <activity
-            android:name=".activities.TrashActivity"
-            android:exported="false" />
+
         <activity
             android:name=".activities.CreateNoteActivity"
-            android:exported="true"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"
+            android:exported="true" />
+
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".activities.SplashScreenActivity"
             android:exported="true"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,7 +37,24 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".database.AlarmBroadCast" />
+        <!-- singletop est pour que l'activité ne puisse se lancer qu'une fois -->
+        <activity
+            android:name=".activities.MainActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
+            >
+        </activity>
+
+        <activity
+            android:name=".activities.TrashActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
+            >
+        </activity>
+
+        <receiver android:name=".broadcast.AlarmBroadCast"/>
     </application>
 
 </manifest>

@@ -147,7 +147,10 @@ public class TrashActivity extends AppCompatActivity implements NotesTrashListen
             view.findViewById(R.id.textRecover).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onBackPressed();
+                    startActivityForResult(
+                            new Intent(getApplicationContext(), MainActivity.class),
+                            1
+                    );
                     @SuppressLint("StaticFieldLeak")
                     class SaveNoteTask extends AsyncTask<Void, Void, Void>{
 
@@ -165,7 +168,6 @@ public class TrashActivity extends AppCompatActivity implements NotesTrashListen
                             finish();
                         }
                     }
-
                     new SaveNoteTask().execute();
 
                     @SuppressLint("StaticFieldLeak")
@@ -173,8 +175,8 @@ public class TrashActivity extends AppCompatActivity implements NotesTrashListen
 
                         @Override
                         protected Void doInBackground(Void... voids) {
-                            NotesDatabase.getDatabase(getApplicationContext()).noteDao()
-                                    .deleteNote(note);
+                            NotesTrashDatabase.getDatabase(getApplicationContext()).noteTrashDao()
+                                    .deleteNote(noteTrash);
                             return null;
                         }
 
@@ -187,7 +189,6 @@ public class TrashActivity extends AppCompatActivity implements NotesTrashListen
                             finish();
                         }
                     }
-
                     new DeleteNoteTask().execute();
                 }
             });

@@ -26,11 +26,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.keepnote.R;
 import com.example.keepnote.adapters.NotesAdapter;
+import com.example.keepnote.adapters.StaggeredGridLayoutManagerAdapter;
 import com.example.keepnote.database.NotesDatabase;
 import com.example.keepnote.entities.Note;
 import com.example.keepnote.listeners.NotesListener;
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
 
     private AlertDialog dialogAddURL;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,8 +74,9 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
 
         notesRecyclerView = findViewById(R.id.notesRecyclerView);
         notesRecyclerView.setLayoutManager(
-                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                new StaggeredGridLayoutManagerAdapter(2, StaggeredGridLayoutManager.VERTICAL)
         );
+
 
         getNotes(REQUEST_CODE_SHOW_NOTES, false);
 
@@ -178,6 +182,8 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
         return filePath;
     }
 
+
+    // cette méthode est pour afficher la note quand on veut voir ou modifier la note.
     @Override
     public void onNoteClicked(Note note, int position) {
         noteClickedPosition = position;
@@ -204,6 +210,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                 return NotesDatabase.getDatabase(getApplicationContext()).noteDao().getAllNotes();
             }
 
+            // en fonction du code passé en paramètre il va réagir différemment
             @Override
             protected void onPostExecute(List<Note> notes) {
                 super.onPostExecute(notes);
@@ -214,6 +221,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                     noteList.add(0, notes.get(0));
                     notesAdapter.notifyItemInserted(0);
                     notesRecyclerView.smoothScrollToPosition(0);
+                    // on supprime la note avant de le remettre à la position voulue
                 }else if (requestCode == REQUEST_CODE_UPDATE_NOTE){
                         noteList.addAll(notes);
                         noteList.remove(noteClickedPosition);

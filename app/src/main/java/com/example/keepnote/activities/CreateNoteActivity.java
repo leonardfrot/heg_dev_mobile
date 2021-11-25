@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -21,7 +22,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -40,13 +40,18 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.keepnote.R;
+import com.example.keepnote.broadcast.AlarmBroadCast;
+import com.example.keepnote.dao.TagDAO;
 import com.example.keepnote.adapters.NotesAdapter;
-import com.example.keepnote.database.AlarmBroadCast;
+//import com.example.keepnote.database.AlarmBroadCast;
 import com.example.keepnote.database.NotesDatabase;
 import com.example.keepnote.database.NotesTrashDatabase;
 import com.example.keepnote.entities.Note;
+import com.example.keepnote.entities.Tag;
 import com.example.keepnote.entities.NoteTrash;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.hootsuite.nachos.NachoTextView;
+import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 
 import java.io.InputStream;
 import java.text.ParseException;
@@ -57,18 +62,27 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import co.lujun.androidtagview.TagContainerLayout;
+import co.lujun.androidtagview.TagView;
+
 public class CreateNoteActivity extends AppCompatActivity {
 
+    private CoordinatorLayout mainLayout;
     private EditText inputNoteTitle, inputNoteSubtitle, inputNoteText;
     private TextView textDateTime;
-    private View viewSubtitleIndicator;
     private ImageView imageNote;
     private TextView textWebURL;
     private LinearLayout layoutWebURL;
     private EditText date_time_in;
+    private EditText add_tag;
 
     private String selectedNoteColor;
     private String selectedImagePath;
+
+    // la librairie pour les tags
+    private TagContainerLayout mTagContainerLayout;
+    private List<String> tagNameList;
+    private List<Tag> tagList;
 
     private static final int REQUEST_CODE_STORAGE_PERMISSION = 1;
     private static final int REQUEST_CODE_SELECT_IMAGE = 2;
@@ -77,6 +91,8 @@ public class CreateNoteActivity extends AppCompatActivity {
     private AlertDialog dialogDeleteNote;
 
     private Note alreadyAvailableNote;
+    private List<Tag> alreadyAvailableTag;
+
 
     private List<Note> noteList;
     private NotesAdapter notesAdapter;
@@ -94,14 +110,17 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         });
 
+        mainLayout = findViewById(R.id.mainlayout);
         inputNoteTitle = findViewById(R.id.inputNoteTitle);
         inputNoteSubtitle = findViewById(R.id.inputNoteSubtitle);
         inputNoteText = findViewById(R.id.inputNote);
         textDateTime = findViewById(R.id.textDateTime);
-        viewSubtitleIndicator = findViewById(R.id.viewSubtitleIndicator);
         imageNote = findViewById(R.id.imageNote);
         textWebURL = findViewById(R.id.textWebUrl);
         layoutWebURL = findViewById(R.id.layoutWebURL);
+        add_tag = findViewById(R.id.add_tag);
+
+        mTagContainerLayout = (TagContainerLayout) findViewById(R.id.tagContainerLayout);
 
         date_time_in = findViewById(R.id.date_time_imput);
         date_time_in.setInputType(InputType.TYPE_NULL);
@@ -171,8 +190,32 @@ public class CreateNoteActivity extends AppCompatActivity {
 
             }
         });
+
+        mTagContainerLayout.setOnTagClickListener(new TagView.OnTagClickListener() {
+            @Override
+            public void onTagClick(int position, String text) {
+
+            }
+
+            @Override
+            public void onTagLongClick(int position, String text) {
+                mTagContainerLayout.removeTag(position);
+
+            }
+
+            @Override
+            public void onSelectedTagDrag(int position, String text) {
+
+            }
+
+            @Override
+            public void onTagCrossClick(int position) {
+
+            }
+        });
+
         initMiscellaneous();
-        setSubtitleIndicator();
+        setBackground();
     }
 
     private void showDateDialog(EditText date_time_in){
@@ -201,8 +244,37 @@ public class CreateNoteActivity extends AppCompatActivity {
                 calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
+
+
     // Cette méthode permet de remettre dans les champs texte, les données des notes lors de vue ou de modification.
     private void setViewOrUpdateNote(){
+
+        @SuppressLint("StaticFieldLeak")
+        class GetTagTask extends AsyncTask<Void, Void, List<Tag>> {
+            @Override
+            protected List<Tag> doInBackground(Void... voids) {
+                return NotesDatabase.getDatabase(getApplicationContext()).tagDAO().getAllTags();
+            }
+
+            // en fonction du code passé en paramètre il va réagir différemment
+            @Override
+            protected void onPostExecute(List<Tag> tags) {
+                super.onPostExecute(tags);
+                System.out.println(tags);
+                alreadyAvailableTag = new ArrayList<>();
+                for(Tag t : tags){
+                    if(t.getNoteTitle().equals(alreadyAvailableNote.getTitle())){
+                        mTagContainerLayout.addTag(t.getTitle());
+                        // récupération des tag existant au début pour ne pas les réinsérer plus tard
+                        alreadyAvailableTag.add(t);
+                    }
+                }
+
+            }
+        }
+        new GetTagTask().execute();
+
+
         inputNoteTitle.setText(alreadyAvailableNote.getTitle());
         inputNoteSubtitle.setText(alreadyAvailableNote.getSubtitle());
         inputNoteText.setText(alreadyAvailableNote.getNoteText());
@@ -248,7 +320,11 @@ public class CreateNoteActivity extends AppCompatActivity {
         note.setDateTime(textDateTime.getText().toString());
         note.setColor(selectedNoteColor);
         note.setImagePath(selectedImagePath);
-        //note.setDeleteDate(false);
+
+        // comme en conflit, on a mit replace, si c'est le meme id, ca va le remplacer.
+        if(alreadyAvailableNote != null){
+            note.setId(alreadyAvailableNote.getId());
+        }
 
         //on a besoion de comparer 2 dates:
 
@@ -270,10 +346,22 @@ public class CreateNoteActivity extends AppCompatActivity {
             note.setWebLink(textWebURL.getText().toString());
         }
 
-        if(alreadyAvailableNote != null){
-            note.setId(alreadyAvailableNote.getId());
+        tagNameList = new ArrayList<>();
+
+        tagNameList = mTagContainerLayout.getTags();
+
+        tagList = new ArrayList<>();
+
+        for (String s : tagNameList){
+            Tag tag = new Tag();
+            tag.setTitle(s);
+            tag.setNoteTitle(note.getTitle());
+            tagList.add(tag);
         }
 
+        if (alreadyAvailableTag!=null){
+            tagList.removeAll(alreadyAvailableTag);
+        }
         alreadyAvailableNote = note;
 
         @SuppressLint("StaticFieldLeak")
@@ -282,6 +370,8 @@ public class CreateNoteActivity extends AppCompatActivity {
             @Override
             protected Void doInBackground(Void... voids){
                 NotesDatabase.getDatabase(getApplicationContext()).noteDao().insertNote(note);
+                NotesDatabase.getDatabase(getApplicationContext()).noteDao().insertAllTags(tagList);
+
                 return null;
             }
 
@@ -298,18 +388,28 @@ public class CreateNoteActivity extends AppCompatActivity {
 
         
         String message = "la date de la note " + title + "est dépassé ";
-        setAlarm(message, timelimit);
+        setAlarm(message, timelimit, note);
+
+        System.out.println(note);
 
     }
 
-    private void setAlarm(String message, String timelimit) {
+    private void setAlarm(String message, String timelimit, Note note) {
+
+        // la note n'est pas null jusqu'ici
+        System.out.println(note);
 
         AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         Intent intent = new Intent(getApplicationContext(), AlarmBroadCast.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("note", note);
+        intent.putExtra("bundle", bundle);
 
         intent.putExtra("message", message);
         intent.putExtra("timelimit", timelimit);
+
+        //obligé de créer un Bundle pour passer un objet en paramètre, sinon null pointer Exception
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
@@ -358,7 +458,7 @@ public class CreateNoteActivity extends AppCompatActivity {
                 imageColor3.setImageResource(0);
                 imageColor4.setImageResource(0);
                 imageColor5.setImageResource(0);
-                setSubtitleIndicator();
+                setBackground();
             }
         });
 
@@ -371,7 +471,7 @@ public class CreateNoteActivity extends AppCompatActivity {
                 imageColor3.setImageResource(0);
                 imageColor4.setImageResource(0);
                 imageColor5.setImageResource(0);
-                setSubtitleIndicator();
+                setBackground();
             }
         });
 
@@ -384,7 +484,7 @@ public class CreateNoteActivity extends AppCompatActivity {
                 imageColor3.setImageResource(R.drawable.ic_done);
                 imageColor4.setImageResource(0);
                 imageColor5.setImageResource(0);
-                setSubtitleIndicator();
+                setBackground();
             }
         });
 
@@ -397,7 +497,7 @@ public class CreateNoteActivity extends AppCompatActivity {
                 imageColor3.setImageResource(0);
                 imageColor4.setImageResource(R.drawable.ic_done);
                 imageColor5.setImageResource(0);
-                setSubtitleIndicator();
+                setBackground();
             }
         });
 
@@ -410,7 +510,7 @@ public class CreateNoteActivity extends AppCompatActivity {
                 imageColor3.setImageResource(0);
                 imageColor4.setImageResource(0);
                 imageColor5.setImageResource(R.drawable.ic_done);
-                setSubtitleIndicator();
+                setBackground();
             }
         });
 
@@ -543,9 +643,8 @@ public class CreateNoteActivity extends AppCompatActivity {
 
     }
 
-    private void setSubtitleIndicator(){
-        GradientDrawable gradientDrawable = (GradientDrawable) viewSubtitleIndicator.getBackground();
-        gradientDrawable.setColor(Color.parseColor(selectedNoteColor));
+    private void setBackground(){
+        mainLayout.setBackgroundColor(Color.parseColor(selectedNoteColor));
     }
 
     private void selectImage(){
@@ -652,4 +751,60 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         dialogAddURL.show();
         }
+
+
+    public void addTag(View view) {
+        String tagToAdd = add_tag.getText().toString();
+        mTagContainerLayout.addTag(tagToAdd);
+        add_tag.setText("");
+        System.out.println(mTagContainerLayout.getTags());
     }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

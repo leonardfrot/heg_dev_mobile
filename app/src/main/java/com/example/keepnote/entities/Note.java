@@ -1,18 +1,26 @@
 package com.example.keepnote.entities;
 
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
-@Entity(tableName = "notes")
+@Entity(tableName = "notes", indices = {@Index(value = {"title"},unique = true)})
+
+// il implémente Seriablizable pour pouvoir passer l'objet note avec les intents
 public class Note implements Serializable {
+
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name="id")
     private int id;
 
+    @NonNull
     @ColumnInfo(name="title")
     private String title;
 
@@ -37,8 +45,7 @@ public class Note implements Serializable {
     @ColumnInfo(name="alert_date")
     private String alertDate;
 
-    //@ColumnInfo(name="delete_date")
-    //private boolean deleteDate;
+
 
     public int getId() {
         return id;
@@ -112,14 +119,6 @@ public class Note implements Serializable {
     public void setAlertDate(@Nullable String alertDate) {
         this.alertDate = alertDate;
     }
-
-    /*public boolean getDeleteDate() {
-        return deleteDate;
-    }
-
-    public void setDeleteDate(boolean deleteDate) {
-        this.deleteDate = deleteDate;
-    }*/
 
     @NonNull
     @Override
