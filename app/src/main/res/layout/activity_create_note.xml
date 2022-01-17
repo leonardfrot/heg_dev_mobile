@@ -52,7 +52,6 @@
                 android:id="@+id/inputNoteTitle"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_marginLeft="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:background="@null"
                 android:hint="@string/note_title"
@@ -69,7 +68,6 @@
                 android:id="@+id/textDateTime"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_5sdp"
                 android:textColor="@color/colorIcon"
                 android:textSize="@dimen/_10sdp"
                 android:textStyle="italic"
@@ -110,20 +108,20 @@
                 android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/inputNoteSubtitle" />
 
-           <ImageView
-               android:id="@+id/imageRemoveImage"
-               android:layout_width="@dimen/_25sdp"
-               android:layout_height="@dimen/_25sdp"
-               android:layout_marginTop="@dimen/_10sdp"
-               android:layout_marginEnd="@dimen/_10sdp"
-               android:background="@drawable/background_delete"
-               android:contentDescription="@string/app_name"
-               android:padding="@dimen/_4sdp"
-               android:src="@drawable/ic_delete"
-               app:tint="@color/colorWhite"
-               android:visibility="gone"
-               app:layout_constraintEnd_toEndOf="@id/imageNote"
-               app:layout_constraintTop_toTopOf="@id/imageNote"/>
+            <ImageView
+                android:id="@+id/imageRemoveImage"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:background="@drawable/background_delete"
+                android:contentDescription="@string/app_name"
+                android:padding="@dimen/_4sdp"
+                android:src="@drawable/ic_delete"
+                app:tint="@color/colorWhite"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@id/imageNote"
+                app:layout_constraintTop_toTopOf="@id/imageNote"/>
 
 
             <LinearLayout
@@ -162,9 +160,7 @@
                 android:id="@+id/inputNote"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_12sdp"
+                android:layout_marginTop="19dp"
                 android:layout_marginBottom="@dimen/_15sdp"
                 android:background="@null"
                 android:gravity="top"
@@ -172,28 +168,62 @@
                 android:importantForAutofill="no"
                 android:includeFontPadding="false"
                 android:inputType="textMultiLine"
-                android:minHeight="@dimen/_30sdp"
+                android:minHeight="@dimen/_100sdp"
                 android:textColor="@color/colorWhite"
                 android:textColorHint="@color/colorTextHint"
                 android:textSize="@dimen/_13sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/layoutWebURL"
-                />
+                tools:layout_editor_absoluteX="16dp" />
 
             <EditText
                 android:id="@+id/date_time_imput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_12sdp"
-                android:layout_marginRight="@dimen/_12sdp"
-                android:layout_marginTop="@dimen/_15sdp"
-                android:hint="Sélectionner la date/heure de fin de tâche"
+                android:hint="select limit date and time"
                 android:textColor="@color/colorIcon"
                 android:textSize="@dimen/_10sdp"
                 android:textColorHint="@color/colorTextHint"
-                android:textAlignment="center"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/inputNote"
+                />
+
+            <EditText
+                android:id="@+id/add_tag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="add tag here"
+                android:textColor="@color/colorIcon"
+                android:textSize="@dimen/_14sdp"
+                android:textColorHint="@color/colorTextHint"
+                app:layout_constraintTop_toBottomOf="@+id/date_time_imput"
+                />
+
+            <Button
+                android:id="@+id/button_add_tag"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_20sdp"
+                app:layout_constraintTop_toBottomOf="@+id/add_tag"
+                android:background="@color/colorPrimaryDark"
+                android:textSize="@dimen/_10sdp"
+                android:text="@string/add_tag"
+                android:textColor="@color/colorWhite"
+                android:onClick="addTag"
+
+                tools:ignore="MissingConstraints" />
+
+            <co.lujun.androidtagview.TagContainerLayout
+                android:id="@+id/tagContainerLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp"
+                android:background="@color/colorPrimary"
+                android:padding="10dp"
+                app:container_enable_drag="false"
+                app:horizontal_interval="10dp"
+                app:tag_clickable="true"
+                app:tag_theme="pure_teal"
+                app:vertical_interval="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/button_add_tag"
                 />
 
 
@@ -203,6 +233,3 @@
     <include layout="@layout/layout_miscellaneous"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-
-

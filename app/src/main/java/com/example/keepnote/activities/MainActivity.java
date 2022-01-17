@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.keepnote.R;
 import com.example.keepnote.adapters.NotesAdapter;
+import com.example.keepnote.adapters.MyGrid;
 import com.example.keepnote.database.NotesDatabase;
 import com.example.keepnote.entities.Note;
 import com.example.keepnote.listeners.NotesListener;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
 
     private AlertDialog dialogAddURL;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,8 +74,9 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
         //on affiche les notes de façon vertical sur 2 colonnes
         notesRecyclerView = findViewById(R.id.notesRecyclerView);
         notesRecyclerView.setLayoutManager(
-                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                new MyGrid(2, StaggeredGridLayoutManager.VERTICAL)
         );
+
 
         noteList = new ArrayList<>();
         notesAdapter = new NotesAdapter(noteList, this);

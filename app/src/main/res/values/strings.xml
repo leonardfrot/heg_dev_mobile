@@ -15,5 +15,6 @@
     <string name="delete_note">Effacer Note</string>
     <string name="are_you_sure_you_want_to_delete_this_note">Êtes-vous sûr de vouloir supprimer cette note ?</string>
     <string name="cancel_dialog">Annuler</string>
+    <string name="add_tag">Add tag</string>
 
 </resources>

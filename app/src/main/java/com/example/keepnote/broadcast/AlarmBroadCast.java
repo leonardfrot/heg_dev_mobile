@@ -1,4 +1,4 @@
-package com.example.keepnote.database;
+package com.example.keepnote.broadcast;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

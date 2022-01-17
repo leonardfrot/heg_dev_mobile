@@ -6,17 +6,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 
-@Entity(tableName = "notes")
+@Entity(tableName = "notes", indices = {@Index(value = {"title"},unique = true)})
+
 // il implémente Seriablizable pour pouvoir passer l'objet note avec les intents
 public class Note implements Serializable {
+
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name="id")
     private int id;
 
+    @NonNull
     @ColumnInfo(name="title")
     private String title;
 
@@ -40,8 +45,6 @@ public class Note implements Serializable {
 
     @ColumnInfo(name="alert_date")
     private String alertDate;
-
-
 
     public int getId() {
         return id;

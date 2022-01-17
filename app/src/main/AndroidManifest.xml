@@ -46,7 +46,7 @@
             >
         </activity>
 
-        <receiver android:name=".database.AlarmBroadCast"/>
+        <receiver android:name=".broadcast.AlarmBroadCast"/>
     </application>
 
 </manifest>

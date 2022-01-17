@@ -7,9 +7,13 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.example.keepnote.dao.NoteDAO;
+import com.example.keepnote.dao.NoteWithTagsDAO;
+import com.example.keepnote.dao.TagDAO;
 import com.example.keepnote.entities.Note;
+import com.example.keepnote.entities.NoteWithTags;
+import com.example.keepnote.entities.Tag;
 
-@Database(entities = Note.class, version = 1, exportSchema = false)
+@Database(entities = {Note.class, Tag.class}, version = 1, exportSchema = false)
 public abstract class NotesDatabase extends RoomDatabase {
 
     private static NotesDatabase notesDatabase;
@@ -25,6 +29,12 @@ public abstract class NotesDatabase extends RoomDatabase {
         return notesDatabase;
     }
 
+    // il faut ajouter tous les DAO
     public abstract NoteDAO noteDao();
+
+    public abstract NoteWithTagsDAO noteWithTagsDAO();
+
+    public abstract TagDAO tagDAO();
+
 
 }

@@ -15,7 +15,6 @@ import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -23,7 +22,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -42,18 +40,26 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.keepnote.R;
-import com.example.keepnote.database.AlarmBroadCast;
+import com.example.keepnote.broadcast.AlarmBroadCast;
+import com.example.keepnote.dao.TagDAO;
 import com.example.keepnote.database.NotesDatabase;
 import com.example.keepnote.entities.Note;
-import com.example.keepnote.notifications.NotificationHelper;
+import com.example.keepnote.entities.Tag;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.hootsuite.nachos.NachoTextView;
+import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+
+import co.lujun.androidtagview.TagContainerLayout;
+import co.lujun.androidtagview.TagView;
 
 public class CreateNoteActivity extends AppCompatActivity {
 
@@ -64,9 +70,15 @@ public class CreateNoteActivity extends AppCompatActivity {
     private TextView textWebURL;
     private LinearLayout layoutWebURL;
     private EditText date_time_in;
+    private EditText add_tag;
 
     private String selectedNoteColor;
     private String selectedImagePath;
+
+    // la librairie pour les tags
+    private TagContainerLayout mTagContainerLayout;
+    private List<String> tagNameList;
+    private List<Tag> tagList;
 
     private static final int REQUEST_CODE_STORAGE_PERMISSION = 1;
     private static final int REQUEST_CODE_SELECT_IMAGE = 2;
@@ -75,6 +87,8 @@ public class CreateNoteActivity extends AppCompatActivity {
     private AlertDialog dialogDeleteNote;
 
     private Note alreadyAvailableNote;
+    private List<Tag> alreadyAvailableTag;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +111,9 @@ public class CreateNoteActivity extends AppCompatActivity {
         imageNote = findViewById(R.id.imageNote);
         textWebURL = findViewById(R.id.textWebUrl);
         layoutWebURL = findViewById(R.id.layoutWebURL);
+        add_tag = findViewById(R.id.add_tag);
+
+        mTagContainerLayout = (TagContainerLayout) findViewById(R.id.tagContainerLayout);
 
         date_time_in = findViewById(R.id.date_time_imput);
         date_time_in.setInputType(InputType.TYPE_NULL);
@@ -166,6 +183,30 @@ public class CreateNoteActivity extends AppCompatActivity {
 
             }
         });
+
+        mTagContainerLayout.setOnTagClickListener(new TagView.OnTagClickListener() {
+            @Override
+            public void onTagClick(int position, String text) {
+
+            }
+
+            @Override
+            public void onTagLongClick(int position, String text) {
+                mTagContainerLayout.removeTag(position);
+
+            }
+
+            @Override
+            public void onSelectedTagDrag(int position, String text) {
+
+            }
+
+            @Override
+            public void onTagCrossClick(int position) {
+
+            }
+        });
+
         initMiscellaneous();
         setBackground();
     }
@@ -196,8 +237,37 @@ public class CreateNoteActivity extends AppCompatActivity {
                 calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
+
+
     // Cette méthode permet de remettre dans les champs texte, les données des notes lors de vue ou de modification.
     private void setViewOrUpdateNote(){
+
+        @SuppressLint("StaticFieldLeak")
+        class GetTagTask extends AsyncTask<Void, Void, List<Tag>> {
+            @Override
+            protected List<Tag> doInBackground(Void... voids) {
+                return NotesDatabase.getDatabase(getApplicationContext()).tagDAO().getAllTags();
+            }
+
+            // en fonction du code passé en paramètre il va réagir différemment
+            @Override
+            protected void onPostExecute(List<Tag> tags) {
+                super.onPostExecute(tags);
+                System.out.println(tags);
+                alreadyAvailableTag = new ArrayList<>();
+                for(Tag t : tags){
+                    if(t.getNoteTitle().equals(alreadyAvailableNote.getTitle())){
+                        mTagContainerLayout.addTag(t.getTitle());
+                        // récupération des tag existant au début pour ne pas les réinsérer plus tard
+                        alreadyAvailableTag.add(t);
+                    }
+                }
+
+            }
+        }
+        new GetTagTask().execute();
+
+
         inputNoteTitle.setText(alreadyAvailableNote.getTitle());
         inputNoteSubtitle.setText(alreadyAvailableNote.getSubtitle());
         inputNoteText.setText(alreadyAvailableNote.getNoteText());
@@ -239,6 +309,11 @@ public class CreateNoteActivity extends AppCompatActivity {
         note.setColor(selectedNoteColor);
         note.setImagePath(selectedImagePath);
 
+        // comme en conflit, on a mit replace, si c'est le meme id, ca va le remplacer.
+        if(alreadyAvailableNote != null){
+            note.setId(alreadyAvailableNote.getId());
+        }
+
         //on a besoion de comparer 2 dates:
 
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm a");
@@ -259,16 +334,30 @@ public class CreateNoteActivity extends AppCompatActivity {
             note.setWebLink(textWebURL.getText().toString());
         }
 
-        if(alreadyAvailableNote != null){
-            note.setId(alreadyAvailableNote.getId());
+        tagNameList = new ArrayList<>();
+
+        tagNameList = mTagContainerLayout.getTags();
+
+        tagList = new ArrayList<>();
+
+        for (String s : tagNameList){
+            Tag tag = new Tag();
+            tag.setTitle(s);
+            tag.setNoteTitle(note.getTitle());
+            tagList.add(tag);
         }
 
+        if (alreadyAvailableTag!=null){
+            tagList.removeAll(alreadyAvailableTag);
+        }
         @SuppressLint("StaticFieldLeak")
         class SaveNoteTask extends AsyncTask<Void, Void, Void>{
 
             @Override
             protected Void doInBackground(Void... voids){
                 NotesDatabase.getDatabase(getApplicationContext()).noteDao().insertNote(note);
+                NotesDatabase.getDatabase(getApplicationContext()).noteDao().insertAllTags(tagList);
+
                 return null;
             }
 
@@ -283,7 +372,6 @@ public class CreateNoteActivity extends AppCompatActivity {
 
         new SaveNoteTask().execute();
 
-        
         String message = "la date de la note " + title + "est dépassé ";
         setAlarm(message, timelimit, note);
 
@@ -318,6 +406,8 @@ public class CreateNoteActivity extends AppCompatActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+
     }
 
     private void initMiscellaneous(){
@@ -426,7 +516,6 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         }
 
-        //Quand on veut ajouter une image, on vérifie que l'application a les droit d'accéder à la galerie
         layoutMiscellaneous.findViewById(R.id.layoutAddImage).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -445,7 +534,6 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         });
 
-        //Ouvre la boite de dialogue d'ajout d'un URL
         layoutMiscellaneous.findViewById(R.id.layoutAddUrl).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -454,8 +542,6 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         });
 
-        //Permer d'ouvrir la boite de dialogue pour effacer la note
-        //Cette option s'affiche uniquement si la note existe déjà
         if(alreadyAvailableNote != null){
             layoutMiscellaneous.findViewById(R.id.layoutDeleteNote).setVisibility(View.VISIBLE);
             layoutMiscellaneous.findViewById(R.id.layoutDeleteNote).setOnClickListener(new View.OnClickListener() {
@@ -469,7 +555,6 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         }
 
-        //méthode d'affichage de la boite de dialogue effacer note
       private void showDeleteNoteDialog(){
         if (dialogDeleteNote == null){
             AlertDialog.Builder builder = new AlertDialog.Builder(CreateNoteActivity.this);
@@ -482,7 +567,6 @@ public class CreateNoteActivity extends AppCompatActivity {
             if(dialogDeleteNote.getWindow() != null){
                 dialogDeleteNote.getWindow().setBackgroundDrawable(new ColorDrawable(0));
             }
-            //Si on appuie sur confirmer l'effacement, on supprime notre note dans la DB
             view.findViewById(R.id.textDeleteNote).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -512,7 +596,6 @@ public class CreateNoteActivity extends AppCompatActivity {
                 }
             });
 
-            //Si on appuye sur annuler, on ferme la boite de dialogue sans rien faire
             view.findViewById(R.id.textCancel).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -633,7 +716,15 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         dialogAddURL.show();
         }
+
+
+    public void addTag(View view) {
+        String tagToAdd = add_tag.getText().toString();
+        mTagContainerLayout.addTag(tagToAdd);
+        add_tag.setText("");
+        System.out.println(mTagContainerLayout.getTags());
     }
+}
 
 
 
