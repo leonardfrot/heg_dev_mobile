@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 // Classe deguelasse qui permet juste de debugger
 
-public class StaggeredGridLayoutManagerAdapter extends StaggeredGridLayoutManager {
-    public StaggeredGridLayoutManagerAdapter(int spanCount, int orientation) {
+public class MyGrid extends StaggeredGridLayoutManager {
+    public MyGrid(int spanCount, int orientation) {
         super(spanCount, orientation);
     }
 

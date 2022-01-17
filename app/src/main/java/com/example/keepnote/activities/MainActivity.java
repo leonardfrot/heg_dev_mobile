@@ -26,13 +26,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.keepnote.R;
 import com.example.keepnote.adapters.NotesAdapter;
-import com.example.keepnote.adapters.StaggeredGridLayoutManagerAdapter;
+import com.example.keepnote.adapters.MyGrid;
 import com.example.keepnote.database.NotesDatabase;
 import com.example.keepnote.entities.Note;
 import com.example.keepnote.listeners.NotesListener;
@@ -74,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
 
         notesRecyclerView = findViewById(R.id.notesRecyclerView);
         notesRecyclerView.setLayoutManager(
-                new StaggeredGridLayoutManagerAdapter(2, StaggeredGridLayoutManager.VERTICAL)
+                new MyGrid(2, StaggeredGridLayoutManager.VERTICAL)
         );
 
 
