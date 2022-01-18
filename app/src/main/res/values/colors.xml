@@ -6,22 +6,28 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
+    <color name="blue_gray_455">#455a64</color>
+    <color name="blue_dark_313">#1c313a</color>
+    <color name="dark_light">#718792</color>
+
+    #1c313a
+
 
     <color name="colorPrimary">#292929</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#FDBE3B</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorSearchIcon">#DBDBDB</color>
-    <color name="colorTextHint">#7B7B7B</color>
+    <color name="colorTextHint">#f7f9fa</color> <!-- #7B7B7B -->
     <color name="colorQuickActionsBackground">#2F2D2E</color>
     <color name="colorIcon">#DBDBDB</color>
-    <color name="colorTextSubtitle">#CECECE</color>
+    <color name="colorTextSubtitle">#f7f9fa</color> <!-- #CECECE -->
     <color name="colorDefaultNoteColor">#333333</color>
     <color name="colorNoteSubtitleText">#FAFAFA</color>
     <color name="colorMiscellaneousBackground">#1F1F1F</color>
-    <color name="colorNoteColor2">#FDBE3B</color>
-    <color name="colorNoteColor3">#FF4842</color>
-    <color name="colorNoteColor4">#3A52FC</color>
+    <color name="colorNoteColor2">#ff9717</color> <!--Orange-->
+    <color name="colorNoteColor3">#e65e5e</color> <!--Rouge #FF4842-->
+    <color name="colorNoteColor4">#58a7db</color> <!--Bleu #3A52FC-->
     <color name="colorNoteColor5">#000000</color>
     <color name="colorDelete">#FF4842</color>
     <color name="colorSearchBackground">#333333</color>

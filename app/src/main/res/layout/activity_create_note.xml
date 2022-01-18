@@ -52,6 +52,7 @@
                 android:id="@+id/inputNoteTitle"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
+                android:layout_marginLeft="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:background="@null"
                 android:hint="@string/note_title"
@@ -68,6 +69,7 @@
                 android:id="@+id/textDateTime"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_5sdp"
                 android:textColor="@color/colorIcon"
                 android:textSize="@dimen/_10sdp"
                 android:textStyle="italic"
@@ -108,20 +110,20 @@
                 android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/inputNoteSubtitle" />
 
-            <ImageView
-                android:id="@+id/imageRemoveImage"
-                android:layout_width="@dimen/_25sdp"
-                android:layout_height="@dimen/_25sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:background="@drawable/background_delete"
-                android:contentDescription="@string/app_name"
-                android:padding="@dimen/_4sdp"
-                android:src="@drawable/ic_delete"
-                app:tint="@color/colorWhite"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="@id/imageNote"
-                app:layout_constraintTop_toTopOf="@id/imageNote"/>
+           <ImageView
+               android:id="@+id/imageRemoveImage"
+               android:layout_width="@dimen/_25sdp"
+               android:layout_height="@dimen/_25sdp"
+               android:layout_marginTop="@dimen/_10sdp"
+               android:layout_marginEnd="@dimen/_10sdp"
+               android:background="@drawable/background_delete"
+               android:contentDescription="@string/app_name"
+               android:padding="@dimen/_4sdp"
+               android:src="@drawable/ic_delete"
+               app:tint="@color/colorWhite"
+               android:visibility="gone"
+               app:layout_constraintEnd_toEndOf="@id/imageNote"
+               app:layout_constraintTop_toTopOf="@id/imageNote"/>
 
 
             <LinearLayout
@@ -160,7 +162,9 @@
                 android:id="@+id/inputNote"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="19dp"
+                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_12sdp"
                 android:layout_marginBottom="@dimen/_15sdp"
                 android:background="@null"
                 android:gravity="top"
@@ -168,7 +172,7 @@
                 android:importantForAutofill="no"
                 android:includeFontPadding="false"
                 android:inputType="textMultiLine"
-                android:minHeight="@dimen/_100sdp"
+                android:minHeight="@dimen/_30sdp"
                 android:textColor="@color/colorWhite"
                 android:textColorHint="@color/colorTextHint"
                 android:textSize="@dimen/_13sdp"
@@ -180,10 +184,16 @@
                 android:id="@+id/date_time_imput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="select limit date and time"
+                android:layout_marginLeft="@dimen/_12sdp"
+                android:layout_marginRight="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:hint="Sélectionner la date/heure de fin de tâche"
                 android:textColor="@color/colorIcon"
+                android:textStyle="italic"
                 android:textSize="@dimen/_10sdp"
-                android:textColorHint="@color/colorTextHint"
+                android:textColorHint="@color/colorSearchIcon"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/inputNote"
                 />
 
@@ -233,3 +243,6 @@
     <include layout="@layout/layout_miscellaneous"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+
